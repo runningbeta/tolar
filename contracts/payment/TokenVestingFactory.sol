@@ -1,4 +1,4 @@
-pragma solidity ^0.4.24;
+pragma solidity 0.4.24;
 
 
 /// @title Token vesting wallet factory - Allows creation of TokenVesting wallet.
