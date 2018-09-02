@@ -3,7 +3,10 @@ pragma solidity 0.4.24;
 import "openzeppelin-solidity/contracts/token/ERC20/ERC20.sol";
 
 
-/// @title Token timelock wallet factory - Allows creation of timelock wallet.
+/**
+ * @title TokenTimelockFactory
+ * @dev Allows creation of timelock wallet.
+ */
 contract TokenTimelockFactory {
 
   /**

@@ -17,7 +17,8 @@ contract('Finalizable', function ([_, owner, ...other]) {
 
   it('can be finalized', async function () {
     await this.contract.finalize({ from: owner });
-    (await this.contract.isFinalized()).should.be.equal(true);
+    (await this.contract.isFinalized())
+      .should.be.equal(true);
   });
 
   it('can execute onlyNotFinalized', async function () {
@@ -25,7 +26,8 @@ contract('Finalizable', function ([_, owner, ...other]) {
   });
 
   it('fails to execute onlyFinalized', async function () {
-    await (this.contract.finalized()).should.be.rejectedWith(EVMRevert);
+    await (this.contract.finalized())
+      .should.be.rejectedWith(EVMRevert);
   });
 
   describe('when finalized', function () {
@@ -39,11 +41,13 @@ contract('Finalizable', function ([_, owner, ...other]) {
     });
 
     it('cannot be finalized twice', async function () {
-      await (this.contract.finalize({ from: owner })).should.be.rejectedWith(EVMRevert);
+      await (this.contract.finalize({ from: owner }))
+        .should.be.rejectedWith(EVMRevert);
     });
 
     it('fails to execute onlyNotFinalized', async function () {
-      await (this.contract.notFinalized()).should.be.rejectedWith(EVMRevert);
+      await (this.contract.notFinalized())
+        .should.be.rejectedWith(EVMRevert);
     });
 
     it('can execute onlyFinalized', async function () {

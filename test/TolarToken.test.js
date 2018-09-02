@@ -21,11 +21,13 @@ contract('TolarToken', function ([owner, alice, bob, ...other]) {
   });
 
   it(`total suply is ${INITIAL_SUPPLY}`, async function () {
-    (await this.token.totalSupply()).should.be.bignumber.equal(INITIAL_SUPPLY);
+    (await this.token.totalSupply())
+      .should.be.bignumber.equal(INITIAL_SUPPLY);
   });
 
   it('owner owns all the tokens', async function () {
-    (await this.token.balanceOf(owner)).should.be.bignumber.equal(TOTAL_SUPPLY);
+    (await this.token.balanceOf(owner))
+      .should.be.bignumber.equal(TOTAL_SUPPLY);
   });
 
   it('refuses ether', async function () {
@@ -44,7 +46,8 @@ contract('TolarToken', function ([owner, alice, bob, ...other]) {
       const totalSupply = await this.token.totalSupply();
 
       await this.token.burnFrom(alice, amount, { from: owner });
-      (await this.token.totalSupply()).should.be.bignumber.equal(totalSupply.sub(amount));
+      (await this.token.totalSupply())
+        .should.be.bignumber.equal(totalSupply.sub(amount));
     };
 
     describe('when not finalized', function () {
@@ -64,7 +67,8 @@ contract('TolarToken', function ([owner, alice, bob, ...other]) {
       });
 
       it('should return unpaused', async function () {
-        await this.token.isFinalized().should.eventually.equal(true);
+        await this.token.isFinalized()
+          .should.eventually.equal(true);
       });
 
       it('owner can burn tokens', ownerCanBurn);
@@ -78,21 +82,24 @@ contract('TolarToken', function ([owner, alice, bob, ...other]) {
         await this.token.approve(owner, amount, { from: owner });
         await this.token.burnFrom(owner, amount, { from: owner });
 
-        (await this.token.balanceOf(owner)).should.be.bignumber.equal(initialBalance.sub(amount));
+        (await this.token.balanceOf(owner))
+          .should.be.bignumber.equal(initialBalance.sub(amount));
       });
 
       it('can burn all approved tokens', async function () {
         await this.token.approve(owner, amount, { from: alice });
         await this.token.burnFrom(alice, amount, { from: owner });
 
-        (await this.token.balanceOf(alice)).should.be.bignumber.equal(0);
+        (await this.token.balanceOf(alice))
+          .should.be.bignumber.equal(0);
       });
 
       it('can burn some approved tokens', async function () {
         await this.token.approve(owner, amount, { from: alice });
         await this.token.burnFrom(alice, amount.div(2), { from: owner });
 
-        (await this.token.allowance(alice, owner)).should.be.bignumber.equal(amount.div(2));
+        (await this.token.allowance(alice, owner))
+          .should.be.bignumber.equal(amount.div(2));
       });
 
       it('fails to burn more than approved amount', async function () {

@@ -22,7 +22,7 @@ const TokenVesting = artifacts.require('TokenVesting');
 const TokenVestingFactory = artifacts.require('TokenVestingFactoryImpl');
 const TokenTimelockFactory = artifacts.require('TokenTimelockFactoryImpl');
 
-contract('TokenDistributor', function ([_, benefactor, owner, customer, wallet, ...otherAccounts]) {
+contract('TokenDistributor', function ([_, benefactor, owner, alice, wallet, ...other]) {
   const amount = ether(500.0);
   const weiAmount = ether(42.0);
   const rate = new BigNumber(1000);
@@ -198,28 +198,28 @@ contract('TokenDistributor', function ([_, benefactor, owner, customer, wallet, 
       it('can deposit presale tokens LoE to cap', async function () {
         await this.token.approve(this.distributor.address, amount, { from: benefactor });
         await this.distributor.contract
-          .depositPresale['address,uint256,uint256'](customer, amount, weiAmount, { from: owner, gas: 500000 });
+          .depositPresale['address,uint256,uint256'](alice, amount, weiAmount, { from: owner, gas: 500000 });
       });
 
       it('fail to deposit bonus tokens above allowance', async function () {
         await this.token.approve(this.distributor.address, amount, { from: benefactor });
         const options = { from: owner, gas: 500000 };
         await expectThrow(() => this.distributor.contract
-          .depositPresale['address,uint256,uint256'](customer, amount.mul(2), weiAmount, options), EVMRevert);
+          .depositPresale['address,uint256,uint256'](alice, amount.mul(2), weiAmount, options), EVMRevert);
       });
 
       it('fail to deposit presale tokens above cap', async function () {
         await this.token.approve(this.distributor.address, amount.mul(10), { from: benefactor });
         const options = { from: owner, gas: 500000 };
         await expectThrow(() => this.distributor.contract
-          .depositPresale['address,uint256,uint256'](customer, amount.mul(7), weiAmount.mul(7), options), EVMRevert);
+          .depositPresale['address,uint256,uint256'](alice, amount.mul(7), weiAmount.mul(7), options), EVMRevert);
       });
 
       describe('after Finalization', function () {
         beforeEach(async function () {
           await this.token.approve(this.distributor.address, amount, { from: benefactor });
           await this.distributor.contract.depositPresale['address,uint256,uint256'](
-            customer,
+            alice,
             amount.div(2),
             weiAmount.div(2),
             { from: owner, gas: 500000 }
@@ -230,7 +230,7 @@ contract('TokenDistributor', function ([_, benefactor, owner, customer, wallet, 
         it('fails to deposit more presale tokens', async function () {
           const options = { from: owner, gas: 500000 };
           await expectThrow(() => this.distributor.contract
-            .depositPresale['address,uint256,uint256'](customer, amount.div(2), weiAmount.div(2), options), EVMRevert);
+            .depositPresale['address,uint256,uint256'](alice, amount.div(2), weiAmount.div(2), options), EVMRevert);
         });
 
         describe('after withdraw time', function () {
@@ -239,19 +239,22 @@ contract('TokenDistributor', function ([_, benefactor, owner, customer, wallet, 
           });
 
           it('can withdraw presale tokens for himself', async function () {
-            await this.distributor.contract.withdrawPresale['']({ from: customer, gas: 500000 });
-            (await this.token.balanceOf(customer)).should.be.bignumber.equal(amount.div(2));
+            await this.distributor.contract.withdrawPresale['']({ from: alice, gas: 500000 });
+            (await this.token.balanceOf(alice))
+              .should.be.bignumber.equal(amount.div(2));
           });
 
           it('can withdraw presale tokens for others', async function () {
             // eslint-disable-next-line dot-notation
-            await this.distributor.contract.withdrawPresale['address'](customer, { from: owner, gas: 500000 });
-            (await this.token.balanceOf(customer)).should.be.bignumber.equal(amount.div(2));
+            await this.distributor.contract.withdrawPresale['address'](alice, { from: owner, gas: 500000 });
+            (await this.token.balanceOf(alice))
+              .should.be.bignumber.equal(amount.div(2));
           });
 
           it('can withdraw presale tokens for others', async function () {
-            await this.distributor.contract.withdrawPresale['address[]']([customer], { from: owner, gas: 500000 });
-            (await this.token.balanceOf(customer)).should.be.bignumber.equal(amount.div(2));
+            await this.distributor.contract.withdrawPresale['address[]']([alice], { from: owner, gas: 500000 });
+            (await this.token.balanceOf(alice))
+              .should.be.bignumber.equal(amount.div(2));
           });
         });
       });
@@ -260,24 +263,24 @@ contract('TokenDistributor', function ([_, benefactor, owner, customer, wallet, 
     describe('as a Bonus Escrow', function () {
       it('can deposit bonus tokens LoE to cap', async function () {
         await this.token.approve(this.distributor.address, amount, { from: benefactor });
-        await this.distributor.depositBonus(customer, amount, { from: owner });
+        await this.distributor.depositBonus(alice, amount, { from: owner });
       });
 
       it('fail to deposit bonus tokens above allowance', async function () {
         await this.token.approve(this.distributor.address, amount, { from: benefactor });
-        await (this.distributor.depositBonus(customer, amount.mul(2), { from: owner }))
+        await (this.distributor.depositBonus(alice, amount.mul(2), { from: owner }))
           .should.be.rejectedWith(EVMRevert);
       });
 
       describe('after Finalization', function () {
         beforeEach(async function () {
           await this.token.approve(this.distributor.address, amount, { from: benefactor });
-          await this.distributor.depositBonus(customer, amount.div(2), { from: owner });
+          await this.distributor.depositBonus(alice, amount.div(2), { from: owner });
           await this.distributor.finalize({ from: owner });
         });
 
         it('fails to deposit more bonus tokens', async function () {
-          await (this.distributor.depositBonus(customer, amount.div(2), { from: owner }))
+          await (this.distributor.depositBonus(alice, amount.div(2), { from: owner }))
             .should.be.rejectedWith(EVMRevert);
         });
 
@@ -287,19 +290,22 @@ contract('TokenDistributor', function ([_, benefactor, owner, customer, wallet, 
           });
 
           it('can withdraw bonus tokens for himself', async function () {
-            await this.distributor.contract.withdrawBonus['']({ from: customer, gas: 500000 });
-            (await this.token.balanceOf(customer)).should.be.bignumber.equal(amount.div(2));
+            await this.distributor.contract.withdrawBonus['']({ from: alice, gas: 500000 });
+            (await this.token.balanceOf(alice))
+              .should.be.bignumber.equal(amount.div(2));
           });
 
           it('can withdraw bonus tokens for others', async function () {
             // eslint-disable-next-line dot-notation
-            await this.distributor.contract.withdrawBonus['address'](customer, { from: owner, gas: 500000 });
-            (await this.token.balanceOf(customer)).should.be.bignumber.equal(amount.div(2));
+            await this.distributor.contract.withdrawBonus['address'](alice, { from: owner, gas: 500000 });
+            (await this.token.balanceOf(alice))
+              .should.be.bignumber.equal(amount.div(2));
           });
 
           it('can withdraw bonus tokens for multiple others', async function () {
-            await this.distributor.contract.withdrawBonus['address[]']([customer], { from: owner, gas: 500000 });
-            (await this.token.balanceOf(customer)).should.be.bignumber.equal(amount.div(2));
+            await this.distributor.contract.withdrawBonus['address[]']([alice], { from: owner, gas: 500000 });
+            (await this.token.balanceOf(alice))
+              .should.be.bignumber.equal(amount.div(2));
           });
         });
       });
@@ -308,11 +314,11 @@ contract('TokenDistributor', function ([_, benefactor, owner, customer, wallet, 
 
   describe('as an IndividuallyCappedCrowdsale proxy', function () {
     it('fails to whitelist a user', async function () {
-      await expectThrow(() => this.distributor.setUserCap(customer, weiAmount, { from: owner }), EVMRevert);
+      await expectThrow(() => this.distributor.setUserCap(alice, weiAmount, { from: owner }), EVMRevert);
     });
 
     it('fails to whitelist a group', async function () {
-      await expectThrow(() => this.distributor.setGroupCap(otherAccounts, weiAmount, { from: owner }), EVMRevert);
+      await expectThrow(() => this.distributor.setGroupCap(other, weiAmount, { from: owner }), EVMRevert);
     });
 
     describe('after Finalization', function () {
@@ -322,13 +328,15 @@ contract('TokenDistributor', function ([_, benefactor, owner, customer, wallet, 
       });
 
       it('can whitelist users', async function () {
-        await this.distributor.setUserCap(customer, weiAmount, { from: owner });
-        (await this.distributor.getUserCap(customer)).should.bignumber.equal(weiAmount);
+        await this.distributor.setUserCap(alice, weiAmount, { from: owner });
+        (await this.distributor.getUserCap(alice))
+          .should.bignumber.equal(weiAmount);
       });
 
       it('can whitelist groups', async function () {
-        await this.distributor.setGroupCap(otherAccounts, weiAmount, { from: owner });
-        (await this.distributor.getUserCap(otherAccounts[0])).should.bignumber.equal(weiAmount);
+        await this.distributor.setGroupCap(other, weiAmount, { from: owner });
+        (await this.distributor.getUserCap(other[0]))
+          .should.bignumber.equal(weiAmount);
       });
 
       describe('before Crowdsale', function () {
@@ -352,13 +360,23 @@ contract('TokenDistributor', function ([_, benefactor, owner, customer, wallet, 
           await increaseTimeTo(this.closingTime + 1);
         });
 
+        it('fails to claim leftover tokens', async function () {
+          await expectThrow(() => this.distributor.claimUnsold(benefactor, { from: owner }), EVMRevert);
+        });
+      });
+
+      describe('after Withdraw time', function () {
+        beforeEach(async function () {
+          await increaseTimeTo(this.withdrawTime + 1);
+        });
+
         it('can claim leftover tokens', async function () {
           const initialBalance = await this.token.balanceOf(benefactor);
           await this.distributor.claimUnsold(benefactor, { from: owner });
 
           const finalBalance = await this.token.balanceOf(benefactor);
           // we had only no issuances after giving allowance (amount * 4)
-          await (finalBalance.should.be.bignumber.equal(amount.mul(4).plus(initialBalance)));
+          finalBalance.should.be.bignumber.equal(amount.mul(4).plus(initialBalance));
         });
 
         it('can claim leftover tokens twice', async function () {
@@ -396,16 +414,18 @@ contract('TokenDistributor', function ([_, benefactor, owner, customer, wallet, 
 
       it('can deposit and lock tokens', async function () {
         const { logs } = await this.distributor
-          .depositAndLock(customer, amount.div(10), this.releaseTime, { from: owner });
+          .depositAndLock(alice, amount.div(10), this.releaseTime, { from: owner });
         const event = inLogs(logs, 'ContractInstantiation', { sender: this.distributor.address });
         const walletAddr = event.args.instantiation;
 
-        (await this.token.balanceOf(walletAddr)).should.bignumber.equal(amount.div(10));
-        (await TokenTimelock.at(walletAddr).beneficiary()).should.be.equal(customer);
+        (await this.token.balanceOf(walletAddr))
+          .should.bignumber.equal(amount.div(10));
+        (await TokenTimelock.at(walletAddr).beneficiary())
+          .should.be.equal(alice);
       });
 
       it('fails to deposit more than approved', async function () {
-        await (this.distributor.depositAndLock(customer, amount.div(5), this.releaseTime, { from: owner }))
+        await (this.distributor.depositAndLock(alice, amount.div(5), this.releaseTime, { from: owner }))
           .should.be.rejectedWith(EVMRevert);
       });
 
@@ -415,45 +435,52 @@ contract('TokenDistributor', function ([_, benefactor, owner, customer, wallet, 
       });
 
       it('fails to deposit with release time before withdraw time', async function () {
-        await (this.distributor.depositAndLock(customer, amount.div(10), this.now, { from: owner }))
+        await (this.distributor.depositAndLock(alice, amount.div(10), this.now, { from: owner }))
           .should.be.rejectedWith(EVMRevert);
       });
 
       it('can deposit twice to same user', async function () {
         // First deposit
         const resp1 = await this.distributor
-          .depositAndLock(customer, amount.div(100), this.releaseTime, { from: owner });
+          .depositAndLock(alice, amount.div(100), this.releaseTime, { from: owner });
         let event = inLogs(resp1.logs, 'ContractInstantiation', { sender: this.distributor.address });
         let walletAddr = event.args.instantiation;
 
-        (await this.token.balanceOf(walletAddr)).should.bignumber.equal(amount.div(100));
-        (await TokenTimelock.at(walletAddr).beneficiary()).should.be.equal(customer);
+        (await this.token.balanceOf(walletAddr))
+          .should.bignumber.equal(amount.div(100));
+        (await TokenTimelock.at(walletAddr).beneficiary())
+          .should.be.equal(alice);
 
         // Second deposit
         const resp2 = await this.distributor
-          .depositAndLock(customer, amount.div(200), this.releaseTime + duration.days(10), { from: owner });
+          .depositAndLock(alice, amount.div(200), this.releaseTime + duration.days(10), { from: owner });
         event = inLogs(resp2.logs, 'ContractInstantiation', { sender: this.distributor.address });
         walletAddr = event.args.instantiation;
 
-        (await this.token.balanceOf(walletAddr)).should.bignumber.equal(amount.div(200));
-        (await TokenTimelock.at(walletAddr).beneficiary()).should.be.equal(customer);
+        (await this.token.balanceOf(walletAddr))
+          .should.bignumber.equal(amount.div(200));
+        (await TokenTimelock.at(walletAddr).beneficiary())
+          .should.be.equal(alice);
       });
 
       it('fails to withdraw', async function () {
         const { logs } = await this.distributor
-          .depositAndLock(customer, amount.div(10), this.releaseTime, { from: owner });
+          .depositAndLock(alice, amount.div(10), this.releaseTime, { from: owner });
         const event = inLogs(logs, 'ContractInstantiation', { sender: this.distributor.address });
         const walletAddr = event.args.instantiation;
 
-        (await this.token.balanceOf(walletAddr)).should.bignumber.equal(amount.div(10));
-        (await TokenTimelock.at(walletAddr).beneficiary()).should.be.equal(customer);
-        await (TokenTimelock.at(walletAddr).release({ from: customer })).should.be.rejectedWith(EVMRevert);
+        (await this.token.balanceOf(walletAddr))
+          .should.bignumber.equal(amount.div(10));
+        (await TokenTimelock.at(walletAddr).beneficiary())
+          .should.be.equal(alice);
+        await (TokenTimelock.at(walletAddr).release({ from: alice }))
+          .should.be.rejectedWith(EVMRevert);
       });
 
       describe('after release time', async function () {
         beforeEach(async function () {
           const { logs } = await this.distributor
-            .depositAndLock(customer, amount.div(20), this.releaseTime, { from: owner });
+            .depositAndLock(alice, amount.div(20), this.releaseTime, { from: owner });
           const event = inLogs(logs, 'ContractInstantiation', { sender: this.distributor.address });
           this.walletAddr = event.args.instantiation;
 
@@ -461,12 +488,15 @@ contract('TokenDistributor', function ([_, benefactor, owner, customer, wallet, 
         });
 
         it('can withdraw', async function () {
-          (await TokenTimelock.at(this.walletAddr).beneficiary()).should.be.equal(customer);
+          (await TokenTimelock.at(this.walletAddr).beneficiary())
+            .should.be.equal(alice);
 
-          await TokenTimelock.at(this.walletAddr).release({ from: customer });
+          await TokenTimelock.at(this.walletAddr).release({ from: alice });
 
-          (await this.token.balanceOf(this.walletAddr)).should.bignumber.equal(0);
-          (await this.token.balanceOf(customer)).should.bignumber.equal(amount.div(20));
+          (await this.token.balanceOf(this.walletAddr))
+            .should.bignumber.equal(0);
+          (await this.token.balanceOf(alice))
+            .should.bignumber.equal(amount.div(20));
         });
       });
 
@@ -477,7 +507,7 @@ contract('TokenDistributor', function ([_, benefactor, owner, customer, wallet, 
         });
 
         it('fails to deposit and lock tokens', async function () {
-          await (this.distributor.depositAndLock(customer, amount.div(10), this.releaseTime, { from: owner }))
+          await (this.distributor.depositAndLock(alice, amount.div(10), this.releaseTime, { from: owner }))
             .should.be.rejectedWith(EVMRevert);
         });
       });
@@ -510,7 +540,7 @@ contract('TokenDistributor', function ([_, benefactor, owner, customer, wallet, 
 
       it('can deposit and vest tokens', async function () {
         const { logs } = await this.distributor.depositAndVest(
-          customer,
+          alice,
           amount.div(10),
           this.releaseTime,
           this.cliffTime,
@@ -520,8 +550,10 @@ contract('TokenDistributor', function ([_, benefactor, owner, customer, wallet, 
         const event = inLogs(logs, 'ContractInstantiation', { sender: this.distributor.address });
         const walletAddr = event.args.instantiation;
 
-        (await this.token.balanceOf(walletAddr)).should.bignumber.equal(amount.div(10));
-        (await TokenTimelock.at(walletAddr).beneficiary()).should.be.equal(customer);
+        (await this.token.balanceOf(walletAddr))
+          .should.bignumber.equal(amount.div(10));
+        (await TokenTimelock.at(walletAddr).beneficiary())
+          .should.be.equal(alice);
       });
 
       it('fails to deposit to 0x0', async function () {
@@ -537,7 +569,7 @@ contract('TokenDistributor', function ([_, benefactor, owner, customer, wallet, 
 
       it('fails to deposit with release time before withdraw time', async function () {
         await (this.distributor.depositAndVest(
-          customer,
+          alice,
           amount.div(10),
           this.closingTime,
           0,
@@ -548,7 +580,7 @@ contract('TokenDistributor', function ([_, benefactor, owner, customer, wallet, 
 
       it('fails to deposit more than approved', async function () {
         await (this.distributor.depositAndVest(
-          customer,
+          alice,
           amount.div(5),
           this.releaseTime,
           this.cliffTime,
@@ -560,7 +592,7 @@ contract('TokenDistributor', function ([_, benefactor, owner, customer, wallet, 
       it('can deposit twice to same user', async function () {
         // First deposit
         const resp1 = await this.distributor.depositAndVest(
-          customer,
+          alice,
           amount.div(100),
           this.releaseTime,
           this.cliffTime,
@@ -570,12 +602,14 @@ contract('TokenDistributor', function ([_, benefactor, owner, customer, wallet, 
         let event = inLogs(resp1.logs, 'ContractInstantiation', { sender: this.distributor.address });
         let walletAddr = event.args.instantiation;
 
-        (await this.token.balanceOf(walletAddr)).should.bignumber.equal(amount.div(100));
-        (await TokenVesting.at(walletAddr).beneficiary()).should.be.equal(customer);
+        (await this.token.balanceOf(walletAddr))
+          .should.bignumber.equal(amount.div(100));
+        (await TokenVesting.at(walletAddr).beneficiary())
+          .should.be.equal(alice);
 
         // Second deposit
         const resp2 = await this.distributor.depositAndVest(
-          customer,
+          alice,
           amount.div(200),
           this.releaseTime,
           this.cliffTime,
@@ -585,13 +619,15 @@ contract('TokenDistributor', function ([_, benefactor, owner, customer, wallet, 
         event = inLogs(resp2.logs, 'ContractInstantiation', { sender: this.distributor.address });
         walletAddr = event.args.instantiation;
 
-        (await this.token.balanceOf(walletAddr)).should.bignumber.equal(amount.div(200));
-        (await TokenVesting.at(walletAddr).beneficiary()).should.be.equal(customer);
+        (await this.token.balanceOf(walletAddr))
+          .should.bignumber.equal(amount.div(200));
+        (await TokenVesting.at(walletAddr).beneficiary())
+          .should.be.equal(alice);
       });
 
       it('fails to withdraw', async function () {
         const { logs } = await this.distributor.depositAndVest(
-          customer,
+          alice,
           amount.div(10),
           this.releaseTime,
           this.cliffTime,
@@ -601,16 +637,18 @@ contract('TokenDistributor', function ([_, benefactor, owner, customer, wallet, 
         const event = inLogs(logs, 'ContractInstantiation', { sender: this.distributor.address });
         const walletAddr = event.args.instantiation;
 
-        (await this.token.balanceOf(walletAddr)).should.bignumber.equal(amount.div(10));
-        (await TokenVesting.at(walletAddr).beneficiary()).should.be.equal(customer);
-        await (TokenVesting.at(walletAddr).release(this.token.address, { from: customer }))
+        (await this.token.balanceOf(walletAddr))
+          .should.bignumber.equal(amount.div(10));
+        (await TokenVesting.at(walletAddr).beneficiary())
+          .should.be.equal(alice);
+        await (TokenVesting.at(walletAddr).release(this.token.address, { from: alice }))
           .should.be.rejectedWith(EVMRevert);
       });
 
       describe('after duration time', async function () {
         beforeEach(async function () {
           const { logs } = await this.distributor.depositAndVest(
-            customer,
+            alice,
             amount.div(20),
             this.releaseTime,
             this.cliffTime,
@@ -624,13 +662,17 @@ contract('TokenDistributor', function ([_, benefactor, owner, customer, wallet, 
         });
 
         it('can withdraw', async function () {
-          (await TokenVesting.at(this.walletAddr).beneficiary()).should.be.equal(customer);
-          (await this.token.balanceOf(this.walletAddr)).should.bignumber.equal(amount.div(20));
+          (await TokenVesting.at(this.walletAddr).beneficiary())
+            .should.be.equal(alice);
+          (await this.token.balanceOf(this.walletAddr))
+            .should.bignumber.equal(amount.div(20));
 
-          await TokenVesting.at(this.walletAddr).release(this.token.address, { from: customer });
+          await TokenVesting.at(this.walletAddr).release(this.token.address, { from: alice });
 
-          (await this.token.balanceOf(this.walletAddr)).should.bignumber.equal(0);
-          (await this.token.balanceOf(customer)).should.bignumber.equal(amount.div(20));
+          (await this.token.balanceOf(this.walletAddr))
+            .should.bignumber.equal(0);
+          (await this.token.balanceOf(alice))
+            .should.bignumber.equal(amount.div(20));
         });
       });
 
@@ -642,7 +684,7 @@ contract('TokenDistributor', function ([_, benefactor, owner, customer, wallet, 
 
         it('fails to deposit and vest tokens', async function () {
           await (this.distributor.depositAndVest(
-            customer,
+            alice,
             amount.div(10),
             this.releaseTime,
             this.cliffTime,
@@ -659,14 +701,14 @@ contract('TokenDistributor', function ([_, benefactor, owner, customer, wallet, 
       beforeEach(async function () {
         await this.token.approve(this.distributor.address, amount.mul(4), { from: benefactor });
         await this.distributor.contract
-          .depositPresale['address,uint256,uint256'](customer, amount, weiAmount, { from: owner, gas: 500000 });
+          .depositPresale['address,uint256,uint256'](alice, amount, weiAmount, { from: owner, gas: 500000 });
       });
 
       describe('if cap reached', function () {
         beforeEach(async function () {
           await this.distributor.contract
             .depositPresale['address,uint256,uint256'](
-              otherAccounts[0],
+              other[0],
               amount.mul(3),
               weiAmount.mul(5),
               { from: owner, gas: 500000 }
@@ -679,11 +721,12 @@ contract('TokenDistributor', function ([_, benefactor, owner, customer, wallet, 
         });
 
         it('crowdsale address is 0x0', async function () {
-          (await this.distributor.crowdsale()).should.equal('0x0000000000000000000000000000000000000000');
+          (await this.distributor.crowdsale())
+            .should.equal('0x0000000000000000000000000000000000000000');
         });
 
         it('fails to whitelist a user', async function () {
-          await expectThrow(() => this.distributor.setUserCap(customer, weiAmount, { from: owner }), EVMRevert);
+          await expectThrow(() => this.distributor.setUserCap(alice, weiAmount, { from: owner }), EVMRevert);
         });
       });
 
@@ -698,7 +741,8 @@ contract('TokenDistributor', function ([_, benefactor, owner, customer, wallet, 
 
         it('instantiates the Crowdsale with correct allowance', async function () {
           const event = inLogs(this.finalizationReceipt.logs, 'CrowdsaleInstantiated', { sender: owner });
-          event.args.allowance.should.be.bignumber.equal(amount.mul(3));
+          event.args.allowance
+            .should.be.bignumber.equal(amount.mul(3));
         });
       });
     });

@@ -8,7 +8,7 @@ require('chai')
   .use(require('chai-as-promised'))
   .should();
 
-function shouldBehaveLikeTokenVestingFactory (owner, beneficiary, otherAccounts) {
+const shouldBehaveLikeTokenVestingFactory = (owner, beneficiary, other) => {
   describe('as a TokenVestingFactory', function () {
     let vestingStart;
     let vestingClif;
@@ -26,7 +26,8 @@ function shouldBehaveLikeTokenVestingFactory (owner, beneficiary, otherAccounts)
 
     it('can count istantiatinos', async function () {
       await this.factory.create(beneficiary, vestingStart, vestingClif, vestingDuration, false, { from: owner });
-      (await this.factory.getInstantiationCount(owner)).should.be.bignumber.equal(1);
+      (await this.factory.getInstantiationCount(owner))
+        .should.be.bignumber.equal(1);
     });
   });
 };

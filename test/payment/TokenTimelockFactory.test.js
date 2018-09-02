@@ -3,11 +3,11 @@ const { shouldBehaveLikeTokenTimelockFactory } = require('./TokenTimelockFactory
 const Token = artifacts.require('TolarToken');
 const TokenTimelockFactory = artifacts.require('TokenTimelockFactoryImpl');
 
-contract('TokenTimelockFactory', function ([_, owner, beneficiary, ...otherAccounts]) {
+contract('TokenTimelockFactory', function ([_, owner, beneficiary, ...other]) {
   beforeEach(async function () {
     this.token = await Token.new({ from: owner });
     this.factory = await TokenTimelockFactory.new({ from: owner });
   });
 
-  shouldBehaveLikeTokenTimelockFactory(owner, beneficiary, otherAccounts);
+  shouldBehaveLikeTokenTimelockFactory(owner, beneficiary, other);
 });

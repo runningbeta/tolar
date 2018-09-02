@@ -6,7 +6,10 @@ import "../lifecycle/Factory.sol";
 import "./TokenVestingFactory.sol";
 
 
-/// @title Token vesting wallet factory - Allows creation of TokenVesting wallet.
+/**
+ * @title TokenVestingFactoryImpl
+ * @dev Allows creation of token vesting wallet.
+ */
 contract TokenVestingFactoryImpl is TokenVestingFactory, Factory {
 
   mapping(address => address[]) public beneficiaryInstantiations;
@@ -33,9 +36,11 @@ contract TokenVestingFactoryImpl is TokenVestingFactory, Factory {
     public
     returns (address wallet)
   {
+    /// @dev TokenVesting checks that beneficiary is not 0x0
+    require(_beneficiary != address(this), "Transfering tokens to this contract address is not allowed.");
     wallet = new TokenVesting(_beneficiary, _start, _cliff, _duration, _revocable);
-    TokenVesting(wallet).transferOwnership(msg.sender);
     beneficiaryInstantiations[_beneficiary].push(wallet);
     register(wallet);
+    TokenVesting(wallet).transferOwnership(msg.sender);
   }
 }

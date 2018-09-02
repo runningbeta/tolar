@@ -29,8 +29,8 @@ contract TokenDistributor is HasNoEther, Finalizable {
 
   // How many token units a buyer gets per wei.
   // The rate is the conversion between wei and the smallest and indivisible token unit.
-  // So, if you are using a rate of 1 with a DetailedERC20 token with 3 decimals called TOL
-  // 1 wei will give you 1 unit, or 0.001 TOL.
+  // So, if you are using a rate of 1 with a DetailedERC20 token with 3 decimals called TOK
+  // 1 wei will give you 1 unit, or 0.001 TOK.
   uint256 public rate;
 
    // Address where funds are collected
@@ -51,9 +51,6 @@ contract TokenDistributor is HasNoEther, Finalizable {
 
   // Amount of wei raised
   uint256 public weiRaised;
-
-  // Allowance that is given to crowdsale contract after it is created
-  uint256 public crowdsaleAllowance;
 
   // Crowdsale that is created after the presale distribution is finalized
   TokenCrowdsale public crowdsale;
@@ -147,6 +144,7 @@ contract TokenDistributor is HasNoEther, Finalizable {
    * @param _amount The amount to transfer.
    */
   function depositPresale(address _dest, uint256 _amount) public onlyOwner onlyNotFinalized {
+    require(_dest != address(this), "Transfering tokens to this contract address is not allowed.");
     require(token.allowance(benefactor, this) >= _amount, "Not enough allowance.");
     token.transferFrom(benefactor, this, _amount);
     token.approve(presaleEscrow, _amount);
@@ -194,6 +192,7 @@ contract TokenDistributor is HasNoEther, Finalizable {
    * @param _amount The amount to transfer.
    */
   function depositBonus(address _dest, uint256 _amount) public onlyOwner onlyNotFinalized {
+    require(_dest != address(this), "Transfering tokens to this contract address is not allowed.");
     require(token.allowance(benefactor, this) >= _amount, "Not enough allowance.");
     token.transferFrom(benefactor, this, _amount);
     token.approve(bonusEscrow, _amount);
@@ -228,7 +227,8 @@ contract TokenDistributor is HasNoEther, Finalizable {
    * @param _timelockFactory Address of the TokenTimelockFactory contract
    */
   function setTokenTimelockFactory(address _timelockFactory) public onlyOwner {
-    require(timelockFactory == address(0), "TokenTimelockFactory should not be initalizied.");
+    require(_timelockFactory != address(0), "Factory address should not be 0x0.");
+    require(timelockFactory == address(0), "Factory already initalizied.");
     timelockFactory = TokenTimelockFactory(_timelockFactory);
   }
 
@@ -252,6 +252,7 @@ contract TokenDistributor is HasNoEther, Finalizable {
   {
     require(token.allowance(benefactor, this) >= _amount, "Not enough allowance.");
     require(_dest != address(0), "Destination address should not be 0x0.");
+    require(_dest != address(this), "Transfering tokens to this contract address is not allowed.");
     require(_releaseTime >= withdrawTime, "Tokens should unlock after withdrawals open.");
     tokenWallet = timelockFactory.create(
       token,
@@ -266,7 +267,8 @@ contract TokenDistributor is HasNoEther, Finalizable {
    * @param _vestingFactory Address of the TokenVestingFactory contract
    */
   function setTokenVestingFactory(address _vestingFactory) public onlyOwner {
-    require(vestingFactory == address(0), "TokenVestingFactory should not be initalizied.");
+    require(_vestingFactory != address(0), "Factory address should not be 0x0.");
+    require(vestingFactory == address(0), "Factory already initalizied.");
     vestingFactory = TokenVestingFactory(_vestingFactory);
   }
 
@@ -294,6 +296,7 @@ contract TokenDistributor is HasNoEther, Finalizable {
   {
     require(token.allowance(benefactor, this) >= _amount, "Not enough allowance.");
     require(_dest != address(0), "Destination address should not be 0x0.");
+    require(_dest != address(this), "Transfering tokens to this contract address is not allowed.");
     require(_start.add(_cliff) >= withdrawTime, "Tokens should unlock after withdrawals open.");
     bool revocable = false;
     tokenWallet = vestingFactory.create(
@@ -311,7 +314,8 @@ contract TokenDistributor is HasNoEther, Finalizable {
    * @param _beneficiary Address where claimable tokens are going to be transfered
    */
   function claimUnsold(address _beneficiary) public onlyIfCrowdsale onlyOwner {
-    require(crowdsale.hasEnded(), "Crowdsale still running.");
+    // solium-disable-next-line security/no-block-members
+    require(block.timestamp > withdrawTime, "Withdrawals not open.");
     uint256 sold = crowdsale.tokensSold();
     uint256 delivered = crowdsale.tokensDelivered();
     uint256 toDeliver = sold.sub(delivered);
@@ -347,10 +351,10 @@ contract TokenDistributor is HasNoEther, Finalizable {
       closingTime,
       withdrawTime
     );
-    crowdsaleAllowance = token.allowance(benefactor, this);
-    token.transferFrom(benefactor, this, crowdsaleAllowance);
-    token.approve(crowdsale, crowdsaleAllowance);
-    emit CrowdsaleInstantiated(msg.sender, crowdsale, crowdsaleAllowance);
+    uint256 allowance = token.allowance(benefactor, this);
+    token.transferFrom(benefactor, this, allowance);
+    token.approve(crowdsale, allowance);
+    emit CrowdsaleInstantiated(msg.sender, crowdsale, allowance);
   }
 
 }

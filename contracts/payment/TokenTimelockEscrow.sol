@@ -5,7 +5,7 @@ import "./TokenConditionalEscrow.sol";
 
 /**
  * @title TokenTimelockEscrow
- * @dev Escrow to only allow withdrawal only if the lock period
+ * @dev Token escrow to only allow withdrawal only if the lock period
  * has expired. As only the owner can make deposits and withdrawals
  * this contract should be owned by the crowdsale, which can then
  * perform deposits and withdrawals for individual users.

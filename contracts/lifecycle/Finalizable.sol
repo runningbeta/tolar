@@ -6,8 +6,7 @@ import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
 
 /**
  * @title Finalizable contract
- * @dev Lifecycle extension where an owner can do extra work
- * after finishing.
+ * @dev Lifecycle extension where an owner can do extra work after finishing.
  */
 contract Finalizable is Ownable {
   using SafeMath for uint256;

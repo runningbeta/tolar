@@ -5,9 +5,7 @@ import "openzeppelin-solidity/contracts/ownership/HasNoContracts.sol";
 import "./payment/TokenTimelockEscrow.sol";
 
 
-/**
- * @title TokenTimelockEscrowImpl
- */
+/// @title TokenTimelockEscrowImpl
 contract TokenTimelockEscrowImpl is HasNoEther, HasNoContracts, TokenTimelockEscrow {
 
   constructor(ERC20 _token, uint256 _releaseTime)

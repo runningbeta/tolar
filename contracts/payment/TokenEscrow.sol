@@ -7,8 +7,8 @@ import "openzeppelin-solidity/contracts/token/ERC20/SafeERC20.sol";
 
 
 /**
- * @title Escrow
- * @dev Base escrow contract, holds funds destinated to a payee until they
+ * @title TokenEscrow
+ * @dev Base token escrow contract, holds funds destinated to a payee until they
  * withdraw them. The contract that uses the escrow as its payment method
  * should be its owner, and provide public methods redirecting to the escrow's
  * deposit and withdraw.
@@ -23,13 +23,11 @@ contract TokenEscrow is Ownable {
   // deposits of the beneficiaries of tokens
   mapping(address => uint256) private deposits;
 
-  // total sum of current deposits
-  uint256 private totalDeposits;
-
   // ERC20 token contract being held
   ERC20 public token;
 
   constructor(ERC20 _token) public {
+    require(_token != address(0), "Token address should not be 0x0.");
     token = _token;
   }
 
@@ -48,9 +46,10 @@ contract TokenEscrow is Ownable {
    */
   function deposit(address _payee, uint256 _amount) public onlyOwner {
     require(_payee != address(0), "Destination address should not be 0x0.");
-    token.safeTransferFrom(owner, this, _amount);
+    require(_payee != address(this), "Deposits should not be made to this contract.");
+
     deposits[_payee] = deposits[_payee].add(_amount);
-    totalDeposits = totalDeposits.add(_amount);
+    token.safeTransferFrom(owner, this, _amount);
 
     emit Deposited(_payee, _amount);
   }
@@ -61,10 +60,10 @@ contract TokenEscrow is Ownable {
    */
   function withdraw(address _payee) public onlyOwner {
     uint256 payment = deposits[_payee];
+    assert(token.balanceOf(address(this)) >= payment);
 
     deposits[_payee] = 0;
     token.safeTransfer(_payee, payment);
-    totalDeposits = totalDeposits.sub(payment);
 
     emit Withdrawn(_payee, payment);
   }

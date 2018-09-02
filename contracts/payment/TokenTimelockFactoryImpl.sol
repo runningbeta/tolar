@@ -6,7 +6,10 @@ import "../lifecycle/Factory.sol";
 import "./TokenTimelockFactory.sol";
 
 
-/// @title Token timelock wallet factory - Allows creation of timelock wallet.
+/**
+ * @title TokenTimelockFactoryImpl
+ * @dev Allows creation of timelock wallet.
+ */
 contract TokenTimelockFactoryImpl is TokenTimelockFactory, Factory {
 
   mapping(address => address[]) public beneficiaryInstantiations;
@@ -26,6 +29,9 @@ contract TokenTimelockFactoryImpl is TokenTimelockFactory, Factory {
     public
     returns (address wallet)
   {
+    require(_token != address(0), "Token address should not be 0x0.");
+    require(_beneficiary != address(0), "Beneficiary address should not be 0x0.");
+    require(_beneficiary != address(this), "Transfering tokens to this contract address is not allowed.");
     wallet = new TokenTimelock(_token, _beneficiary, _releaseTime);
     beneficiaryInstantiations[_beneficiary].push(wallet);
     register(wallet);

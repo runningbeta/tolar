@@ -1,7 +1,10 @@
 pragma solidity 0.4.24;
 
 
-/// @title Token vesting wallet factory - Allows creation of TokenVesting wallet.
+/**
+ * @title TokenVestingFactory
+ * @dev Allows creation of token vesting wallet.
+ */
 contract TokenVestingFactory {
 
   /**

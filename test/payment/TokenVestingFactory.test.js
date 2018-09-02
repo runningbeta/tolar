@@ -2,10 +2,10 @@ const { shouldBehaveLikeTokenVestingFactory } = require('./TokenVestingFactory.b
 
 const TokenVestingFactory = artifacts.require('TokenVestingFactoryImpl');
 
-contract('TokenVestingFactory', function ([_, owner, beneficiary, ...otherAccounts]) {
+contract('TokenVestingFactory', function ([_, owner, beneficiary, ...other]) {
   beforeEach(async function () {
     this.factory = await TokenVestingFactory.new({ from: owner });
   });
 
-  shouldBehaveLikeTokenVestingFactory(owner, beneficiary, otherAccounts);
+  shouldBehaveLikeTokenVestingFactory(owner, beneficiary, other);
 });
