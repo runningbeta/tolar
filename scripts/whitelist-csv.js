@@ -2,10 +2,12 @@ const minimist = require('minimist');
 const fs = require('fs');
 const csv = require('csvtojson');
 const { utils } = require('web3');
-const { logScript } = require('./util/logs');
+const { chalk, logScript } = require('./util/logs');
 const setGroupCap = require('./setGroupCap');
 
 const TokenDistributor = artifacts.require('TokenDistributor');
+
+const SCRIPT_NAME = '[TokenDistributor] Whitelist csv script';
 
 /**
  * Run this script by passing additional arguments
@@ -14,7 +16,7 @@ const TokenDistributor = artifacts.require('TokenDistributor');
  */
 module.exports = async function (callback) {
   try {
-    logScript('Whitelist csv script');
+    logScript(SCRIPT_NAME);
 
     const args = minimist(process.argv.slice(2), { string: 'distributor' });
     const distAddress = args.distributor; // address of the distributor contract
@@ -41,6 +43,7 @@ module.exports = async function (callback) {
 
     callback();
   } catch (e) {
+    console.error(chalk.red(`${SCRIPT_NAME} error:`));
     callback(e);
   }
 };

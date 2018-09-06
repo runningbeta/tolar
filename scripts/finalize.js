@@ -1,8 +1,10 @@
 const minimist = require('minimist');
 const inquirer = require('inquirer');
-const { logScript, logTx } = require('./util/logs');
+const { chalk, logScript, logTx } = require('./util/logs');
 
 const Finalizable = artifacts.require('Finalizable');
+
+const SCRIPT_NAME = '[Finalizable] Finalization script';
 
 /**
  * Script that can be used to finalize Finalizable contracts
@@ -13,7 +15,7 @@ const Finalizable = artifacts.require('Finalizable');
  */
 module.exports = async function (callback) {
   try {
-    logScript('Finalization script');
+    logScript(SCRIPT_NAME);
 
     const args = minimist(process.argv.slice(2), { string: 'contract' });
     const address = args.contract;
@@ -38,7 +40,7 @@ module.exports = async function (callback) {
 
     callback();
   } catch (e) {
-    console.error('Finalization error!');
+    console.error(chalk.red(`${SCRIPT_NAME} error:`));
     callback(e);
   }
 };

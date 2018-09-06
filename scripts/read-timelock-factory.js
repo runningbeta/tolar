@@ -1,10 +1,12 @@
 const minimist = require('minimist');
 const moment = require('moment');
-const { logScript } = require('./util/logs');
+const { chalk, logScript } = require('./util/logs');
 
 const TokenTimelockFactory = artifacts.require('TokenTimelockFactoryImpl');
 const TokenTimelock = artifacts.require('TokenTimelock');
 const Token = artifacts.require('ERC20');
+
+const SCRIPT_NAME = '[TimelockFactory] Read script';
 
 /**
  * Script that can be used to read public params from TokenDistributor contract
@@ -15,7 +17,7 @@ const Token = artifacts.require('ERC20');
  */
 module.exports = async function (callback) {
   try {
-    logScript('Read Timelock Factory script');
+    logScript(SCRIPT_NAME);
 
     const args = minimist(process.argv.slice(2), { string: ['contract', 'creator'] });
     console.log(`Using contract: ${args.contract}`);
@@ -43,7 +45,7 @@ module.exports = async function (callback) {
 
     callback();
   } catch (e) {
-    console.error('Read error!');
+    console.error(chalk.red(`${SCRIPT_NAME} error:`));
     callback(e);
   }
 };

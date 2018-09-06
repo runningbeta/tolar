@@ -1,8 +1,10 @@
 const minimist = require('minimist');
 const moment = require('moment');
-const { logScript } = require('./util/logs');
+const { chalk, logScript } = require('./util/logs');
 
 const TokenTimelockEscrow = artifacts.require('TokenTimelockEscrow');
+
+const SCRIPT_NAME = '[TimelockEscrow] Read script';
 
 /**
  * Script that can be used to read all data and events from TokenTimelockEscrow contract
@@ -13,7 +15,7 @@ const TokenTimelockEscrow = artifacts.require('TokenTimelockEscrow');
  */
 module.exports = async function (callback) {
   try {
-    logScript('Read TimelockEscrow script');
+    logScript(SCRIPT_NAME);
 
     const args = minimist(process.argv.slice(2), { string: 'contract', boolean: 'raw' });
     console.log(`Using contract: ${args.contract}`);
@@ -50,7 +52,7 @@ module.exports = async function (callback) {
 
     callback();
   } catch (e) {
-    console.error('Read error!');
+    console.error(chalk.red(`${SCRIPT_NAME} error:`));
     callback(e);
   }
 };

@@ -223,6 +223,42 @@ contract TokenDistributor is HasNoEther, Finalizable {
   }
 
   /**
+   * @dev Called by the payer to deposit tokens and bonus as credit to be pulled by benefactor.
+   * @param _dest The destination address of the funds.
+   * @param _amount The amount to transfer.
+   * @param _bonusAmount The bonus amount to transfer.
+   */
+  function depositPresaleWithBonus(
+    address _dest,
+    uint256 _amount,
+    uint256 _bonusAmount
+  )
+    public
+  {
+    depositPresale(_dest, _amount);
+    depositBonus(_dest, _bonusAmount);
+  }
+
+  /**
+   * @dev Called by the payer to deposit tokens and bonus as credit to be pulled by benefactor.
+   * @param _dest The destination address of the funds.
+   * @param _amount The amount to transfer.
+   * @param _weiAmount The amount of wei exchanged for the tokens.
+   * @param _bonusAmount The bonus amount to transfer.
+   */
+  function depositPresaleWithBonus(
+    address _dest,
+    uint256 _amount,
+    uint256 _weiAmount,
+    uint256 _bonusAmount
+  )
+    public
+  {
+    depositPresale(_dest, _amount, _weiAmount);
+    depositBonus(_dest, _bonusAmount);
+  }
+
+  /**
    * @dev Setter for TokenTimelockFactory because of gas limits
    * @param _timelockFactory Address of the TokenTimelockFactory contract
    */

@@ -1,15 +1,17 @@
 const minimist = require('minimist');
 const moment = require('moment');
 const { promisify } = require('util');
-const { logScript, logTx } = require('./util/logs');
+const { chalk, logScript, logTx } = require('./util/logs');
 const config = require('./config');
 
 const TokenDistributor = artifacts.require('TokenDistributor');
 const Token = artifacts.require('ERC20');
 
+const SCRIPT_NAME = '[TokenDistributor] Distribute team tokens';
+
 module.exports = async function (callback) {
   try {
-    logScript('Distribute team tokens');
+    logScript(SCRIPT_NAME);
 
     const accounts = await promisify(web3.eth.getAccounts)();
     console.log(`Using account: ${accounts[0]}`);
@@ -31,7 +33,7 @@ module.exports = async function (callback) {
       const escrow = config.escrow[i];
       const escrowAmount = totalSupply.mul(escrow.amount);
       // eslint-disable-next-line
-      console.log(`[TokenDistributor] Deposit ${escrow.amount}% for ${escrow.id} and lock until ${moment.unix(escrow.duration)}`);
+      console.log(`[TokenDistributor] Deposit ${escrow.amount * 100}% for ${escrow.id} and lock until ${moment.unix(escrow.duration)}`);
       const receipt = await distributor.depositAndLock(escrow.address, escrowAmount, escrow.duration)
         .then(logTx);
       const timelockAddr = receipt.logs[0].args.instantiation;
@@ -40,6 +42,7 @@ module.exports = async function (callback) {
 
     callback();
   } catch (e) {
+    console.error(chalk.red(`${SCRIPT_NAME} error:`));
     callback(e);
   }
 };

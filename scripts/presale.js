@@ -3,10 +3,11 @@ const csv = require('csvtojson');
 const minimist = require('minimist');
 const { promisify } = require('util');
 const { utils } = require('web3');
-const { logScript, logTx } = require('./util/logs');
+const { chalk, logScript, logTx } = require('./util/logs');
 
 const TokenDistributor = artifacts.require('TokenDistributor');
 
+const SCRIPT_NAME = '[TokenDistributor] Presale script';
 /**
  * Run this script by passing additional arguments
  * truffle exec ./scripts/presale.js --distributor 0xbd2e0bd... --data ./scripts/presale-sample.csv
@@ -14,7 +15,7 @@ const TokenDistributor = artifacts.require('TokenDistributor');
  */
 module.exports = async function (callback) {
   try {
-    logScript('Presale script');
+    logScript(SCRIPT_NAME);
 
     const args = minimist(process.argv.slice(2), { string: 'distributor' });
     const distAddress = args.distributor; // address of the distributor contract
@@ -35,12 +36,9 @@ module.exports = async function (callback) {
 
       for (let j = 0; j < presale.length; j++) {
         const sale = presale[j];
-
-        const data = distributor.contract.depositPresale['address,uint256,uint256']
-          .getData(sale.address, sale.tokens, sale.wei, options);
+        const data = distributor.contract.depositPresaleWithBonus['address,uint256,uint256,uint256']
+          .getData(sale.address, sale.tokens, sale.wei, sale.bonus, options);
         await distributor.sendTransaction({ from: accounts[0], value: 0, data })
-          .then(logTx);
-        await distributor.depositBonus(sale.address, sale.bonus)
           .then(logTx);
 
         // Log Presale invesment
@@ -53,6 +51,7 @@ module.exports = async function (callback) {
     }
     callback();
   } catch (e) {
+    console.error(chalk.red(`${SCRIPT_NAME} error:`));
     callback(e);
   }
 };

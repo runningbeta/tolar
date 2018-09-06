@@ -1,8 +1,10 @@
 const minimist = require('minimist');
 const moment = require('moment');
-const { logScript } = require('./util/logs');
+const { chalk, logScript } = require('./util/logs');
 
 const TokenDistributor = artifacts.require('TokenDistributor');
+
+const SCRIPT_NAME = '[TokenDistributor] Read script';
 
 /**
  * Script that can be used to read public params from TokenDistributor contract
@@ -13,7 +15,7 @@ const TokenDistributor = artifacts.require('TokenDistributor');
  */
 module.exports = async function (callback) {
   try {
-    logScript('Read TokeDistributor script');
+    logScript(SCRIPT_NAME);
 
     const args = minimist(process.argv.slice(2), { string: 'contract' });
     const address = args.contract;
@@ -71,7 +73,7 @@ module.exports = async function (callback) {
 
     callback();
   } catch (e) {
-    console.error('Read error!');
+    console.error(chalk.red(`${SCRIPT_NAME} error:`));
     callback(e);
   }
 };
