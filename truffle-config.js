@@ -1,4 +1,4 @@
-// trufle.js
+// trufle-config.js
 // required for running ES6 tests
 require('babel-register');
 require('babel-polyfill');
@@ -47,7 +47,6 @@ module.exports = {
     ropsten: {
       provider: () => infuraProvider('ropsten'),
       network_id: 3, // eslint-disable-line camelcase
-      gas: 4700000,
       gasPrice: web3.utils.toWei('20', 'gwei'),
     },
     mainnet: {
