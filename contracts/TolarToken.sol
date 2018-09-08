@@ -28,7 +28,7 @@ import "./token/ERC20/SafeStandardToken.sol";
  */
 contract TolarToken is NoOwner, Finalizable, DetailedERC20, SafeStandardToken, StandardBurnableToken {
 
-  string public constant NAME = "Example Token";
+  string public constant NAME = "Tolar Token";
   string public constant SYMBOL = "TOL";
   uint8 public constant DECIMALS = 18;
 

@@ -69,7 +69,6 @@ contract TokenDistributor is HasNoEther, Finalizable {
 
   /// @dev Throws if called before the crowdsale is created.
   modifier onlyIfCrowdsale() {
-    require(isFinalized, "Contract not finalized.");
     require(crowdsale != address(0), "Crowdsale not started.");
     _;
   }
@@ -369,9 +368,8 @@ contract TokenDistributor is HasNoEther, Finalizable {
    * and calculated cap depending on the amount raised in presale.
    */
   function finalization() internal {
-    super.finalization();
     uint256 crowdsaleCap = cap.sub(weiRaised);
-    if (crowdsaleCap == 0) {
+    if (crowdsaleCap < 1 ether) {
       // Cap reached in presale, no crowdsale necessary
       return;
     }

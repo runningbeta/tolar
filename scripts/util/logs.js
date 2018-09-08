@@ -1,7 +1,10 @@
 const chalk = require('chalk');
+const figlet = require('figlet');
 
 const logScript = title => {
+  const art = figlet.textSync('RunningBeta');
   console.log();
+  console.log(art);
   console.log(chalk.green(title));
   console.log(chalk.green('-'.repeat(title.length)));
 };
