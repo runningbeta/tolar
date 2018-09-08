@@ -2,7 +2,7 @@ const minimist = require('minimist');
 const fs = require('fs');
 const csv = require('csvtojson');
 const { utils } = require('web3');
-const { chalk, logScript } = require('./util/logs');
+const { logger, logScript } = require('./util/logs');
 const setGroupCap = require('./setGroupCap');
 
 const TokenDistributor = artifacts.require('TokenDistributor');
@@ -22,7 +22,7 @@ module.exports = async function (callback) {
     const distAddress = args.distributor; // address of the distributor contract
     const fileName = args.data; // path to the CSV file
     const columnName = args.column || 'address'; // column name
-    console.log(`Reading csv data from: ${fileName}`);
+    logger.data(`Reading csv data from: ${fileName}`);
 
     const csvFs = await fs.createReadStream(fileName);
     const data = await csv({ eol: '\n' }).fromStream(csvFs);
@@ -30,7 +30,7 @@ module.exports = async function (callback) {
     const distributor = await TokenDistributor.at(distAddress);
 
     if (distributor) {
-      console.log(`Whitelist accounts... [${data.length}]`);
+      logger.data(`Whitelist accounts... [${data.length}]`);
 
       const addresses = [];
       for (let j = 0; j < data.length; j++) {
@@ -44,7 +44,7 @@ module.exports = async function (callback) {
 
     callback();
   } catch (e) {
-    console.error(chalk.red(`${SCRIPT_NAME} error:`));
+    logger.error(`${SCRIPT_NAME} error:`);
     callback(e);
   }
 };

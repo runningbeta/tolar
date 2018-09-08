@@ -1,6 +1,6 @@
 const minimist = require('minimist');
 const moment = require('moment');
-const { chalk, logScript } = require('./util/logs');
+const { logger, logScript } = require('./util/logs');
 
 const TokenTimelockEscrow = artifacts.require('TokenTimelockEscrow');
 
@@ -18,14 +18,14 @@ module.exports = async function (callback) {
     logScript(SCRIPT_NAME);
 
     const args = minimist(process.argv.slice(2), { string: 'contract', boolean: 'raw' });
-    console.log(`Using contract: ${args.contract}`);
+    logger.data(`Using contract: ${args.contract}`);
 
     const contract = await TokenTimelockEscrow.at(args.contract);
 
     const token = await contract.token();
-    console.log(`Token: ${token}`);
+    logger.data(`Token: ${token}`);
     const releaseTime = await contract.releaseTime();
-    console.log(`Release time: ${releaseTime} or ${moment.unix(releaseTime)}`);
+    logger.data(`Release time: ${releaseTime} or ${moment.unix(releaseTime)}`);
 
     const events = contract.allEvents({
       fromBlock: 0,
@@ -39,20 +39,20 @@ module.exports = async function (callback) {
         return;
       }
 
-      if (args.raw) console.log(events);
+      if (args.raw) logger.data(events);
 
       for (let i = 0; i < events.length; i++) {
         const eventObj = events[i];
-        console.log();
-        console.log(eventObj.event);
-        console.log('  - Payee: ' + eventObj.args.payee.toString(10));
-        console.log('  - Amount: ' + eventObj.args.amount);
+        logger.data('\n');
+        logger.data(eventObj.event);
+        logger.data('  - Payee: ' + eventObj.args.payee.toString(10));
+        logger.data('  - Amount: ' + eventObj.args.amount);
       }
     });
 
     callback();
   } catch (e) {
-    console.error(chalk.red(`${SCRIPT_NAME} error:`));
+    logger.error(`${SCRIPT_NAME} error:`);
     callback(e);
   }
 };

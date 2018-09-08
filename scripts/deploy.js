@@ -2,7 +2,7 @@ const minimist = require('minimist');
 const moment = require('moment');
 const { utils } = require('web3');
 const { promisify } = require('util');
-const { chalk, logScript, logContract, logTx } = require('./util/logs');
+const { logger, logScript, logContract, logTx } = require('./util/logs');
 const config = require('./config');
 
 const TokenDistributor = artifacts.require('TokenDistributor');
@@ -16,10 +16,10 @@ module.exports = async function (callback) {
 
     const accounts = await promisify(web3.eth.getAccounts)();
     const owner = accounts[0];
-    console.log(`Using owner: ${owner}`);
+    logger.data(`Using owner: ${owner}`);
 
     const args = minimist(process.argv.slice(2), { string: 'wallet' });
-    console.log(`Using wallet: ${args.wallet}`);
+    logger.data(`Using wallet: ${args.wallet}`);
     if (!args.wallet) {
       console.error('Error: unknown wallet');
       return;
@@ -30,22 +30,22 @@ module.exports = async function (callback) {
     const Token = artifacts.require(config.token);
     if (Token) {
       // Deploy token contract
-      console.log();
-      console.log(`[${config.token}] Deploying...`);
+      logger.data('\n');
+      logger.data(`[${config.token}] Deploying...`);
       const token = await Token.new()
         .then(logContract);
 
-      console.log();
-      console.log('[TokenDistributor] Deploying with params:');
-      console.log(` - _benefactor: ${owner}`);
-      console.log(` - _rate: ${config.rate}`);
-      console.log(` - _wallet: ${args.wallet}`);
-      console.log(` - _token: ${token.address}`);
-      console.log(` - _cap: ${config.cap} [${utils.fromWei(config.cap)} ETH]`);
-      console.log(` - _openingTime: ${config.openingTime} [${moment.unix(config.openingTime)}]`);
-      console.log(` - _closingTime: ${config.closingTime} [${moment.unix(config.closingTime)}]`);
-      console.log(` - _withdrawTime: ${config.withdrawTime} [${moment.unix(config.withdrawTime)}]`);
-      console.log(` - _bonusTime: ${config.bonusTime} [${moment.unix(config.bonusTime)}]`);
+      logger.data('\n');
+      logger.data('[TokenDistributor] Deploying with params:');
+      logger.data(` - _benefactor: ${owner}`);
+      logger.data(` - _rate: ${config.rate}`);
+      logger.data(` - _wallet: ${args.wallet}`);
+      logger.data(` - _token: ${token.address}`);
+      logger.data(` - _cap: ${config.cap} [${utils.fromWei(config.cap)} ETH]`);
+      logger.data(` - _openingTime: ${config.openingTime} [${moment.unix(config.openingTime)}]`);
+      logger.data(` - _closingTime: ${config.closingTime} [${moment.unix(config.closingTime)}]`);
+      logger.data(` - _withdrawTime: ${config.withdrawTime} [${moment.unix(config.withdrawTime)}]`);
+      logger.data(` - _bonusTime: ${config.bonusTime} [${moment.unix(config.bonusTime)}]`);
 
       const params = [
         owner, // benefactor
@@ -62,28 +62,28 @@ module.exports = async function (callback) {
       const distributor = await TokenDistributor.new(...params)
         .then(logContract);
 
-      console.log();
-      console.log('[TokenTimelockFactory] Deploying...');
+      logger.data('\n');
+      logger.data('[TokenTimelockFactory] Deploying...');
       const timelockFactory = await TokenTimelockFactory.new()
         .then(logContract);
 
-      console.log();
-      console.log('[TokenDistributor] Setting TokenTimelockFactory...');
+      logger.data('\n');
+      logger.data('[TokenDistributor] Setting TokenTimelockFactory...');
       await distributor.setTokenTimelockFactory(timelockFactory.address)
         .then(logTx);
-      console.log('Timelock factory set.');
+      logger.data('Timelock factory set.');
 
-      console.log();
-      console.log(`[${config.token}] Approving distributor for 100% funds...`);
+      logger.data('\n');
+      logger.data(`[${config.token}] Approving distributor for 100% funds...`);
       const balanceOfBenefactor = await token.balanceOf(owner);
       await token.approve(distributor.address, balanceOfBenefactor)
         .then(logTx);
-      console.log(`[${config.token}] Distributor ${distributor.address} approved for ${balanceOfBenefactor} TOL.\n`);
+      logger.data(`[${config.token}] Distributor ${distributor.address} approved for ${balanceOfBenefactor} TOL.\n`);
     }
 
     callback();
   } catch (e) {
-    console.error(chalk.red(`${SCRIPT_NAME} error:`));
+    logger.error(`${SCRIPT_NAME} error:`);
     callback(e);
   }
 };

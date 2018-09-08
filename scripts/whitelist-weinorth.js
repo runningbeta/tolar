@@ -1,7 +1,7 @@
 const minimist = require('minimist');
 const axios = require('axios');
 const { utils } = require('web3');
-const { chalk, logScript } = require('./util/logs');
+const { logger, logScript } = require('./util/logs');
 const setGroupCap = require('./setGroupCap');
 
 const TokenDistributor = artifacts.require('TokenDistributor');
@@ -22,12 +22,12 @@ module.exports = async function (callback) {
 
     const args = minimist(process.argv.slice(2), { string: 'distributor' });
     const distAddress = args.distributor; // address of the distributor contract
-    console.log(`Weinorth environment: ${args.env}`);
+    logger.data(`Weinorth environment: ${args.env}`);
 
     const distributor = await TokenDistributor.at(distAddress);
 
     const endpoint = `${reports(args.env)}/applicants/whitelist?appId=${args.appId}`;
-    console.log(`Reading whitelist from: ${endpoint}`);
+    logger.data(`Reading whitelist from: ${endpoint}`);
     const response = await axios.get(endpoint);
     if (response.status !== 200) {
       throw new Error('Error while fetching whitelisted accounts.');
@@ -35,21 +35,21 @@ module.exports = async function (callback) {
 
     const whitelist = response.data;
     if (distributor) {
-      console.log(`Total accounts... [${whitelist.length}]`);
+      logger.data(`Total accounts... [${whitelist.length}]`);
 
       const addresses = [];
       for (let j = 0; j < whitelist.length; j++) {
         if (whitelist[j].approved) addresses.push(whitelist[j].account);
       }
 
-      console.log(`Whitelist accounts... [${addresses.length}]`);
+      logger.data(`Whitelist accounts... [${addresses.length}]`);
       const cap = utils.toWei('10', 'ether');
       await setGroupCap(distributor, addresses, cap);
     }
 
     callback();
   } catch (e) {
-    console.error(chalk.red(`${SCRIPT_NAME} error:`));
+    logger.error(`${SCRIPT_NAME} error:`);
     callback(e);
   }
 };

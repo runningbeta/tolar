@@ -1,6 +1,6 @@
 const minimist = require('minimist');
 const moment = require('moment');
-const { chalk, logScript } = require('./util/logs');
+const { logger, logScript } = require('./util/logs');
 
 const TokenTimelockFactory = artifacts.require('TokenTimelockFactoryImpl');
 const TokenTimelock = artifacts.require('TokenTimelock');
@@ -20,32 +20,32 @@ module.exports = async function (callback) {
     logScript(SCRIPT_NAME);
 
     const args = minimist(process.argv.slice(2), { string: ['contract', 'creator'] });
-    console.log(`Using contract: ${args.contract}`);
+    logger.data(`Using contract: ${args.contract}`);
 
     const contract = await TokenTimelockFactory.at(args.contract);
 
     const instantiationCount = await contract.getInstantiationCount(args.creator);
-    console.log(`Creator total instantiation count: ${instantiationCount}`);
+    logger.data(`Creator total instantiation count: ${instantiationCount}`);
 
     for (let i = 0; i < instantiationCount; i++) {
       const instanceAddr = await contract.instantiations(args.creator, i);
       const timelock = await TokenTimelock.at(instanceAddr);
-      console.log();
-      console.log(`Timelock: ${instanceAddr}`);
+      logger.data('\n');
+      logger.data(`Timelock: ${instanceAddr}`);
 
       const token = await timelock.token();
-      console.log(`  - Token: ${token}`);
+      logger.data(`  - Token: ${token}`);
       const balance = await Token.at(token).balanceOf(instanceAddr);
-      console.log(`  - Balance: ${balance}`);
+      logger.data(`  - Balance: ${balance}`);
       const beneficiary = await timelock.beneficiary();
-      console.log(`  - Beneficiary: ${beneficiary}`);
+      logger.data(`  - Beneficiary: ${beneficiary}`);
       const releaseTime = await timelock.releaseTime();
-      console.log(`  - Release time: ${releaseTime} or ${moment.unix(releaseTime)}`);
+      logger.data(`  - Release time: ${releaseTime} or ${moment.unix(releaseTime)}`);
     }
 
     callback();
   } catch (e) {
-    console.error(chalk.red(`${SCRIPT_NAME} error:`));
+    logger.error(`${SCRIPT_NAME} error:`);
     callback(e);
   }
 };

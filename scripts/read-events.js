@@ -1,5 +1,5 @@
 const minimist = require('minimist');
-const { chalk, logScript } = require('./util/logs');
+const { logger, logScript } = require('./util/logs');
 
 const SCRIPT_NAME = 'Read Events script';
 
@@ -15,7 +15,7 @@ module.exports = async function (callback) {
     logScript(SCRIPT_NAME);
 
     const args = minimist(process.argv.slice(2), { string: 'contract' });
-    console.log(`Using contract: ${args.contract}`);
+    logger.data(`Using contract: ${args.contract}`);
 
     const Contract = artifacts.require(args.name);
     const contract = await Contract.at(args.contract);
@@ -32,12 +32,12 @@ module.exports = async function (callback) {
         return;
       }
 
-      console.log(events);
+      logger.data(events);
     });
 
     callback();
   } catch (e) {
-    console.error(chalk.red(`${SCRIPT_NAME} error:`));
+    logger.error(`${SCRIPT_NAME} error:`);
     callback(e);
   }
 };

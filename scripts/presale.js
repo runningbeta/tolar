@@ -3,7 +3,7 @@ const csv = require('csvtojson');
 const minimist = require('minimist');
 const { promisify } = require('util');
 const { utils } = require('web3');
-const { chalk, logScript, logTx } = require('./util/logs');
+const { logger, logScript, logTx } = require('./util/logs');
 
 const TokenDistributor = artifacts.require('TokenDistributor');
 
@@ -20,8 +20,8 @@ module.exports = async function (callback) {
     const args = minimist(process.argv.slice(2), { string: 'distributor' });
     const distAddress = args.distributor; // address of the distributor contract
     const fileName = args.data; // path to the CSV file
-    console.log(`Using distributor contract: ${distAddress}`);
-    console.log(`Reading presale data from: ${fileName}`);
+    logger.data(`Using distributor contract: ${distAddress}`);
+    logger.data(`Reading presale data from: ${fileName}`);
 
     const csvFs = await fs.createReadStream(fileName);
     const presale = await csv({ eol: '\n' }).fromStream(csvFs);
@@ -29,7 +29,7 @@ module.exports = async function (callback) {
     const distributor = await TokenDistributor.at(distAddress);
 
     if (distributor) {
-      console.log(`Issue presale tokens... [${presale.length}]\n`);
+      logger.data(`Issue presale tokens... [${presale.length}]\n`);
 
       const accounts = await promisify(web3.eth.getAccounts)();
       const options = { from: accounts[0] };
@@ -42,16 +42,16 @@ module.exports = async function (callback) {
           .then(logTx);
 
         // Log Presale invesment
-        console.log(`Presale #${j} | ${sale.address}`);
+        logger.data(`Presale #${j} | ${sale.address}`);
         const totalETH = `${utils.fromWei(sale.wei)} ETH`;
         const totalTOL = `${utils.fromWei(sale.tokens)} TOL`;
         const totalBonus = `${utils.fromWei(sale.bonus)} TOL`;
-        console.log(`  - Invested: ${totalETH} | Bought: ${totalTOL} | Bonus: ${totalBonus}\n`);
+        logger.data(`  - Invested: ${totalETH} | Bought: ${totalTOL} | Bonus: ${totalBonus}\n`);
       }
     }
     callback();
   } catch (e) {
-    console.error(chalk.red(`${SCRIPT_NAME} error:`));
+    logger.error(`${SCRIPT_NAME} error:`);
     callback(e);
   }
 };

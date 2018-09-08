@@ -1,6 +1,6 @@
 const minimist = require('minimist');
 const moment = require('moment');
-const { chalk, logScript } = require('./util/logs');
+const { logger, logScript } = require('./util/logs');
 
 const TokenDistributor = artifacts.require('TokenDistributor');
 
@@ -19,61 +19,61 @@ module.exports = async function (callback) {
 
     const args = minimist(process.argv.slice(2), { string: 'contract' });
     const address = args.contract;
-    console.log(`Using contract: ${address}`);
+    logger.data(`Using contract: ${address}`);
 
     const contract = await TokenDistributor.at(address);
 
     const owner = await contract.owner();
-    console.log(`Contract owner: ${owner}`);
+    logger.data(`Contract owner: ${owner}`);
 
     const isFinalized = await contract.isFinalized();
-    console.log(`Contract finalized: ${isFinalized}`);
+    logger.data(`Contract finalized: ${isFinalized}`);
 
     const benefactor = await contract.benefactor();
-    console.log(`Crowdsale factory - benefactor: ${benefactor}`);
+    logger.data(`Crowdsale factory - benefactor: ${benefactor}`);
 
     const rate = await contract.rate();
-    console.log(`Crowdsale factory - rate: ${rate}`);
+    logger.data(`Crowdsale factory - rate: ${rate}`);
 
     const wallet = await contract.wallet();
-    console.log(`Crowdsale factory - wallet: ${wallet}`);
+    logger.data(`Crowdsale factory - wallet: ${wallet}`);
 
     const token = await contract.token();
-    console.log(`Crowdsale factory - token: ${token}`);
+    logger.data(`Crowdsale factory - token: ${token}`);
 
     const cap = await contract.cap();
-    console.log(`Crowdsale factory - cap: ${cap}`);
+    logger.data(`Crowdsale factory - cap: ${cap}`);
 
     const openingTime = await contract.openingTime();
-    console.log(`Crowdsale factory - openingTime: ${openingTime} or ${moment.unix(openingTime)}`);
+    logger.data(`Crowdsale factory - openingTime: ${openingTime} or ${moment.unix(openingTime)}`);
 
     const closingTime = await contract.closingTime();
-    console.log(`Crowdsale factory - closingTime: ${closingTime} or ${moment.unix(closingTime)}`);
+    logger.data(`Crowdsale factory - closingTime: ${closingTime} or ${moment.unix(closingTime)}`);
 
     const withdrawTime = await contract.withdrawTime();
-    console.log(`Crowdsale factory - withdrawTime: ${withdrawTime} or ${moment.unix(withdrawTime)}`);
+    logger.data(`Crowdsale factory - withdrawTime: ${withdrawTime} or ${moment.unix(withdrawTime)}`);
 
     const weiRaised = await contract.weiRaised();
-    console.log(`Crowdsale factory - weiRaised: ${weiRaised}`);
+    logger.data(`Crowdsale factory - weiRaised: ${weiRaised}`);
 
     const crowdsale = await contract.crowdsale();
-    console.log(`Crowdsale contract: ${crowdsale}`);
+    logger.data(`Crowdsale contract: ${crowdsale}`);
 
     const presaleEscrow = await contract.presaleEscrow();
-    console.log(`Presale Escrow contract: ${presaleEscrow}`);
+    logger.data(`Presale Escrow contract: ${presaleEscrow}`);
 
     const bonusEscrow = await contract.bonusEscrow();
-    console.log(`Bonus Escrow contract: ${bonusEscrow}`);
+    logger.data(`Bonus Escrow contract: ${bonusEscrow}`);
 
     const timelockFactory = await contract.timelockFactory();
-    console.log(`Timelock Factory contract: ${timelockFactory}`);
+    logger.data(`Timelock Factory contract: ${timelockFactory}`);
 
     const vestingFactory = await contract.vestingFactory();
-    console.log(`Vesting Factory contract: ${vestingFactory}`);
+    logger.data(`Vesting Factory contract: ${vestingFactory}`);
 
     callback();
   } catch (e) {
-    console.error(chalk.red(`${SCRIPT_NAME} error:`));
+    logger.error(`${SCRIPT_NAME} error:`);
     callback(e);
   }
 };

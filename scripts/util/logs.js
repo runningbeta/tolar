@@ -1,36 +1,75 @@
-const chalk = require('chalk');
 const figlet = require('figlet');
+const winston = require('winston');
+
+const config = {
+  levels: {
+    error: 0,
+    tx: 1,
+    warn: 2,
+    data: 3,
+    info: 4,
+  },
+  colors: {
+    error: 'red',
+    tx: 'blue',
+    warn: 'yellow',
+    data: 'grey',
+    info: 'green',
+  },
+};
+
+winston.addColors(config.colors);
+
+const logger = winston.createLogger({
+  levels: config.levels,
+  transports: [
+    new winston.transports.Console({
+      format: winston.format.combine(
+        winston.format.colorize({ message: true }),
+        winston.format.printf(info => `${info.message}`),
+      ),
+    }),
+    new winston.transports.File({
+      format: winston.format.combine(
+        winston.format.timestamp(),
+        winston.format.printf(info => `${info.timestamp} ${info.level}: ${info.message}`)
+      ),
+      filename: 'output.log',
+    }),
+  ],
+  level: 'info',
+});
 
 const logScript = title => {
   const art = figlet.textSync('RunningBeta');
-  console.log();
-  console.log(art);
-  console.log(chalk.green(title));
-  console.log(chalk.green('-'.repeat(title.length)));
+  logger.data('\n' + art);
+  logger.info(title);
+  logger.info('-'.repeat(title.length));
+  logger.data(JSON.stringify(process.argv, null, 2));
 };
 
 const logContract = r => {
-  console.log();
-  console.log(chalk.blue(`Transaction: ${r.transactionHash}`));
-  console.log(`Contract created: ${r.address}`);
-  console.log(`Contract name: ${r.constructor.contractName}`);
-  console.log(chalk.blue('-'.repeat(79)));
+  logger.data('\n');
+  logger.tx(`Transaction: ${r.transactionHash}`);
+  logger.data(`Contract created: ${r.address}`);
+  logger.data(`Contract name: ${r.constructor.contractName}`);
+  logger.tx('-'.repeat(79));
   return Promise.resolve(r);
 };
 
 const logTx = r => {
-  console.log();
-  console.log(chalk.blue(`Transaction: ${r.tx}`));
-  console.log(`Transaction index: ${r.receipt.transactionIndex}`);
-  console.log(`Block hash: ${r.receipt.blockHash}`);
-  console.log(`Block number: ${r.receipt.blockNumber}`);
-  console.log(`Gas used: ${r.receipt.gasUsed}`);
-  console.log(chalk.blue('-'.repeat(79)));
+  logger.data('\n');
+  logger.tx(`Transaction: ${r.tx}`);
+  logger.data(`Transaction index: ${r.receipt.transactionIndex}`);
+  logger.data(`Block hash: ${r.receipt.blockHash}`);
+  logger.data(`Block number: ${r.receipt.blockNumber}`);
+  logger.data(`Gas used: ${r.receipt.gasUsed}`);
+  logger.tx('-'.repeat(79));
   return Promise.resolve(r);
 };
 
 module.exports = {
-  chalk,
+  logger,
   logScript,
   logContract,
   logTx,
