@@ -34,7 +34,8 @@ module.exports = async function (callback) {
 
       const addresses = [];
       for (let j = 0; j < data.length; j++) {
-        addresses.push(data[j][columnName]);
+        const address = data[j][columnName];
+        addresses.push(address);
       }
 
       const cap = utils.toWei('10', 'ether');
