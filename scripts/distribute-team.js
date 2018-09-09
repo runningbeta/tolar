@@ -1,6 +1,7 @@
 const minimist = require('minimist');
 const moment = require('moment');
 const { promisify } = require('util');
+const { allValid } = require('./util/addresses');
 const { logger, logScript, logTx } = require('./util/logs');
 const config = require('./config');
 
@@ -14,13 +15,18 @@ module.exports = async function (callback) {
     logScript(SCRIPT_NAME);
 
     const accounts = await promisify(web3.eth.getAccounts)();
-    logger.data(`Using account: ${accounts[0]}`);
+    logger.data(`Using owner: ${accounts[0]}`);
 
     const args = minimist(process.argv.slice(2), { string: 'distributor' });
     logger.data(`Using distributor: ${args.distributor}`);
     if (!args.distributor) {
       console.error('Error: unknown distributor');
       return;
+    }
+
+    const ignoreChecksum = false;
+    if (!allValid(config.escrow.map(p => p.address), ignoreChecksum)) {
+      throw new Error('Some addresses not valid');
     }
 
     const distributor = await TokenDistributor.at(args.distributor);

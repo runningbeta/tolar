@@ -1,6 +1,7 @@
 const minimist = require('minimist');
 const fs = require('fs');
 const csv = require('csvtojson');
+const { promisify } = require('util');
 const { utils } = require('web3');
 const { logger, logScript } = require('./util/logs');
 const setGroupCap = require('./setGroupCap');
@@ -18,6 +19,9 @@ module.exports = async function (callback) {
   try {
     logScript(SCRIPT_NAME);
 
+    const accounts = await promisify(web3.eth.getAccounts)();
+    logger.data(`Using owner: ${accounts[0]}`);
+
     const args = minimist(process.argv.slice(2), { string: 'distributor' });
     const distAddress = args.distributor; // address of the distributor contract
     const fileName = args.data; // path to the CSV file
@@ -33,8 +37,8 @@ module.exports = async function (callback) {
       logger.data(`Whitelist accounts... [${data.length}]`);
 
       const addresses = [];
-      for (let j = 0; j < data.length; j++) {
-        const address = data[j][columnName];
+      for (let i = 0; i < data.length; i++) {
+        const address = data[i][columnName];
         addresses.push(address);
       }
 

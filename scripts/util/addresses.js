@@ -10,6 +10,11 @@ const filterInvalid = (addresses, ignoreChecksum) => addresses
     return isValid;
   });
 
+// check if all addresses are valid
+const allValid = (addresses, ignoreChecksum) =>
+  filterInvalid(addresses, ignoreChecksum).length === addresses.length;
+
 module.exports = {
   filterInvalid,
+  allValid,
 };

@@ -1,5 +1,6 @@
 const minimist = require('minimist');
 const inquirer = require('inquirer');
+const { promisify } = require('util');
 const { logger, logScript, logTx } = require('./util/logs');
 
 const Finalizable = artifacts.require('Finalizable');
@@ -16,6 +17,9 @@ const SCRIPT_NAME = '[Finalizable] Finalization script';
 module.exports = async function (callback) {
   try {
     logScript(SCRIPT_NAME);
+
+    const accounts = await promisify(web3.eth.getAccounts)();
+    logger.data(`Using owner: ${accounts[0]}`);
 
     const args = minimist(process.argv.slice(2), { string: 'contract' });
     const address = args.contract;
