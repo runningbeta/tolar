@@ -18,6 +18,24 @@ const TokenTimelock = artifacts.require('TokenTimelock');
 const shouldBehaveLikeTokenTimelockFactory = (owner, beneficiary, other) => {
   const amount = ether(17.0);
 
+  it('should not allow token 0x0', async function () {
+    this.releaseTime = (await latestTime()) + duration.days(2);
+    await (this.factory.create('0x0', beneficiary, this.releaseTime, { from: owner }))
+      .should.be.rejectedWith(EVMRevert);
+  });
+
+  it('should not allow beneficiary 0x0', async function () {
+    this.releaseTime = (await latestTime()) + duration.days(2);
+    await (this.factory.create(this.token.address, '0x0', this.releaseTime, { from: owner }))
+      .should.be.rejectedWith(EVMRevert);
+  });
+
+  it('should not allow beneficiary factory', async function () {
+    this.releaseTime = (await latestTime()) + duration.days(2);
+    await (this.factory.create(this.token.address, this.factory.address, this.releaseTime, { from: owner }))
+      .should.be.rejectedWith(EVMRevert);
+  });
+
   describe('as a TokenTimelockFactory', function () {
     beforeEach(async function () {
       this.releaseTime = (await latestTime()) + duration.days(2);

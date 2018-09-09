@@ -1,3 +1,4 @@
+const minimist = require('minimist');
 const figlet = require('figlet');
 const winston = require('winston');
 
@@ -20,6 +21,8 @@ const config = {
 
 winston.addColors(config.colors);
 
+const args = minimist(process.argv.slice(2));
+
 const logger = winston.createLogger({
   levels: config.levels,
   transports: [
@@ -34,7 +37,7 @@ const logger = winston.createLogger({
         winston.format.timestamp(),
         winston.format.printf(info => `${info.timestamp} ${info.level}: ${info.message}`)
       ),
-      filename: 'output.log',
+      filename: `output.${args.network}.log`,
     }),
   ],
   level: 'info',
@@ -46,6 +49,7 @@ const logScript = title => {
   logger.info(title);
   logger.info('-'.repeat(title.length));
   logger.data(JSON.stringify(process.argv, null, 2));
+  logger.data(`Writing logs to output.${args.network}.log`);
 };
 
 const logContract = r => {

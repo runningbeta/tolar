@@ -195,6 +195,13 @@ contract('TokenDistributor', function ([_, benefactor, owner, alice, wallet, ...
 
   describe('as a Crowdsale Factory', function () {
     describe('as a Presale Escrow', function () {
+      it('can not deposit presale to distributor address', async function () {
+        await this.token.approve(this.distributor.address, amount, { from: benefactor });
+        const fn = this.distributor.contract.depositPresale['address,uint256,uint256'];
+        const options = { from: owner, gas: 500000 };
+        await expectThrow(() => fn(this.distributor.address, amount, weiAmount, options), EVMRevert);
+      });
+
       it('can deposit presale tokens LoE to cap', async function () {
         await this.token.approve(this.distributor.address, amount, { from: benefactor });
         await this.distributor.contract
@@ -261,9 +268,27 @@ contract('TokenDistributor', function ([_, benefactor, owner, alice, wallet, ...
     });
 
     describe('as a Bonus Escrow', function () {
+      it('can not deposit bonus to distributor address', async function () {
+        await this.token.approve(this.distributor.address, amount, { from: benefactor });
+        await (this.distributor.depositBonus(this.distributor.address, amount, { from: owner }))
+          .should.be.rejectedWith(EVMRevert);
+      });
+
       it('can deposit bonus tokens LoE to cap', async function () {
         await this.token.approve(this.distributor.address, amount, { from: benefactor });
         await this.distributor.depositBonus(alice, amount, { from: owner });
+      });
+
+      it('can deposit presale and bonus tokens LoE to cap', async function () {
+        await this.token.approve(this.distributor.address, amount, { from: benefactor });
+        const fn = this.distributor.contract.depositPresaleWithBonus['address,uint256,uint256'];
+        await fn(alice, amount.div(2), amount.div(2), { from: owner, gas: 500000 });
+      });
+
+      it('can deposit presale and bonus tokens with wei LoE to cap', async function () {
+        await this.token.approve(this.distributor.address, amount, { from: benefactor });
+        const fn = this.distributor.contract.depositPresaleWithBonus['address,uint256,uint256,uint256'];
+        await fn(alice, amount.div(2), weiAmount, amount.div(2), { from: owner, gas: 500000 });
       });
 
       it('fail to deposit bonus tokens above allowance', async function () {
@@ -412,6 +437,13 @@ contract('TokenDistributor', function ([_, benefactor, owner, alice, wallet, ...
           .should.be.rejectedWith(EVMRevert);
       });
 
+      it('can not deposit and lock to distributor address', async function () {
+        await this.token.approve(this.distributor.address, amount, { from: benefactor });
+        const illegal = this.distributor.address;
+        await (this.distributor.depositAndLock(illegal, amount.div(10), this.releaseTime, { from: owner }))
+          .should.be.rejectedWith(EVMRevert);
+      });
+
       it('can deposit and lock tokens', async function () {
         const { logs } = await this.distributor
           .depositAndLock(alice, amount.div(10), this.releaseTime, { from: owner });
@@ -536,6 +568,17 @@ contract('TokenDistributor', function ([_, benefactor, owner, alice, wallet, ...
       it('fails to reset Token Vesting Factory to 0x0', async function () {
         await (this.distributor.setTokenVestingFactory(0x0, { from: owner }))
           .should.be.rejectedWith(EVMRevert);
+      });
+
+      it('can not deposit and vest to distributor address', async function () {
+        await (this.distributor.depositAndVest(
+          this.distributor.address,
+          amount.div(10),
+          this.releaseTime,
+          this.cliffTime,
+          this.durationTime,
+          { from: owner }
+        )).should.be.rejectedWith(EVMRevert);
       });
 
       it('can deposit and vest tokens', async function () {

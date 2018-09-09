@@ -44,8 +44,8 @@ module.exports = async function (callback) {
       const escrow = config.escrow[i];
       const escrowAmount = totalSupply.mul(escrow.percentage);
       // eslint-disable-next-line
-      logger.data(`[TokenDistributor] Deposit ${escrow.percentage * 100}% for ${escrow.id} and lock until ${moment.unix(escrow.duration)}`);
-      const receipt = await distributor.depositAndLock(escrow.address, escrowAmount, escrow.duration)
+      logger.data(`[TokenDistributor] Deposit ${escrow.percentage * 100}% for ${escrow.id} and lock until ${moment.unix(escrow.releaseTime)}`);
+      const receipt = await distributor.depositAndLock(escrow.address, escrowAmount, escrow.releaseTime)
         .then(logTx);
       const timelockAddr = receipt.logs[0].args.instantiation;
       logger.data(`Locked ${utils.fromWei(escrowAmount.toString(10))} TOL tokens at: ${timelockAddr}\n`);
