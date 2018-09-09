@@ -1,8 +1,11 @@
 const minimist = require('minimist');
 const moment = require('moment');
+const assert = require('assert');
+const { utils } = require('web3');
 const { promisify } = require('util');
 const { allValid } = require('./util/addresses');
 const { logger, logScript, logTx } = require('./util/logs');
+
 const config = require('./config');
 
 const TokenDistributor = artifacts.require('TokenDistributor');
@@ -35,15 +38,17 @@ module.exports = async function (callback) {
 
     logger.data('Locking tokens into escrow...\n');
     const totalSupply = await token.totalSupply();
+    assert(totalSupply.toString(10) === config.totalSupply);
+
     for (let i = 0; i < config.escrow.length; i++) {
       const escrow = config.escrow[i];
-      const escrowAmount = totalSupply.mul(escrow.amount);
+      const escrowAmount = totalSupply.mul(escrow.percentage);
       // eslint-disable-next-line
-      logger.data(`[TokenDistributor] Deposit ${escrow.amount * 100}% for ${escrow.id} and lock until ${moment.unix(escrow.duration)}`);
+      logger.data(`[TokenDistributor] Deposit ${escrow.percentage * 100}% for ${escrow.id} and lock until ${moment.unix(escrow.duration)}`);
       const receipt = await distributor.depositAndLock(escrow.address, escrowAmount, escrow.duration)
         .then(logTx);
       const timelockAddr = receipt.logs[0].args.instantiation;
-      logger.data(`Locked ${escrowAmount.div(1e+18).toFormat()} TOL tokens at: ${timelockAddr}\n`);
+      logger.data(`Locked ${utils.fromWei(escrowAmount.toString(10))} TOL tokens at: ${timelockAddr}\n`);
     }
 
     callback();

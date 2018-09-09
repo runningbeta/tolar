@@ -12,10 +12,13 @@ const duration = {
 
 const openingTime = moment('2018-09-15T14:00:00+00:00').unix();
 const closingTime = moment('2018-09-20T14:00:00+00:00').unix();
-const withdrawTime = moment('2018-09-27T14:00:00+00:00').unix();
+const withdrawTime = moment('2018-09-30T14:00:00+00:00').unix();
+
+const totalSupply = utils.toWei('1000000000', 'ether');
 
 module.exports = {
   token: 'TolarToken',
+  totalSupply,
   rate: 6894,
   cap: utils.toWei('45000', 'ether'),
 
@@ -32,13 +35,13 @@ module.exports = {
     {
       id: 'founder_1',
       address: '0xf17f52151EbEF6C7334FAD080c5704D77216b732',
-      amount: 0.1,
+      percentage: 0.1,
       duration: closingTime + duration.years(2),
     },
     {
       id: 'founder_2',
       address: '0xC5fdf4076b8F3A5357c5E395ab970B5B54098Fef',
-      amount: 0.1,
+      percentage: 0.1,
       duration: closingTime + duration.years(2),
     },
     // development fund 32%
@@ -46,49 +49,49 @@ module.exports = {
     //  5% available after 2yr
     // 22% available after 3yr
     {
-      id: 'devFund',
+      id: 'dev_fund',
       address: '0x821aEa9a577a9b44299B9c15c88cf3087F3b5544',
-      amount: 0.05,
+      percentage: 0.05,
       duration: closingTime + duration.years(1),
     },
     {
-      id: 'devFund',
+      id: 'dev_fund',
       address: '0x821aEa9a577a9b44299B9c15c88cf3087F3b5544',
-      amount: 0.05,
+      percentage: 0.05,
       duration: closingTime + duration.years(2),
     },
     {
-      id: 'devFund',
+      id: 'dev_fund',
       address: '0x821aEa9a577a9b44299B9c15c88cf3087F3b5544',
-      amount: 0.22,
+      percentage: 0.22,
       duration: closingTime + duration.years(3),
     },
     // node start fund 8%
     {
       id: 'nodes',
       address: '0x0d1d4e623D10F9FBA5Db95830F7d3839406C6AF2',
-      amount: 0.08,
+      percentage: 0.08,
       duration: closingTime + duration.days(90),
     },
     // developers fund 2.5%
     {
       id: 'developers',
       address: '0x2932b7A2355D6fecc4b5c0B6BD44cC31df247a2e',
-      amount: 0.025,
+      percentage: 0.025,
       duration: closingTime + duration.years(2),
     },
     // developers fund 2.5%
     {
       id: 'advisors',
       address: '0x2191eF87E392377ec08E7c08Eb105Ef5448eCED5',
-      amount: 0.025,
+      percentage: 0.025,
       duration: withdrawTime,
     },
-    // beta
+    // beta fee
     {
       id: 'runningbeta',
       address: '0x0F4F2Ac550A1b4e2280d04c21cEa7EBD822934b5',
-      amount: 0.00189585,
+      percentage: 0.00189585,
       duration: closingTime + duration.days(180),
     },
   ],

@@ -9,6 +9,7 @@ const { logger, logScript, logTx } = require('./util/logs');
 const TokenDistributor = artifacts.require('TokenDistributor');
 
 const SCRIPT_NAME = '[TokenDistributor] Presale script';
+
 /**
  * Run this script by passing additional arguments
  * truffle exec ./scripts/presale.js --distributor 0xbd2e0bd... --data ./scripts/presale-sample.csv
