@@ -5,6 +5,7 @@ const { promisify } = require('util');
 const { utils } = require('web3');
 const { allValid } = require('./util/addresses');
 const { logger, logScript, logTx } = require('./util/logs');
+const to = require('./util/to');
 
 const TokenDistributor = artifacts.require('TokenDistributor');
 
@@ -36,27 +37,26 @@ module.exports = async function (callback) {
       throw new Error('Some addresses not valid');
     }
 
-    const distributor = await TokenDistributor.at(distAddress);
+    const [ error, distributor ] = await to(TokenDistributor.at(distAddress));
+    if (error) throw error;
 
-    if (distributor) {
-      logger.data(`Issue presale tokens... [${presale.length}]\n`);
+    logger.data(`Issue presale tokens... [${presale.length}]\n`);
+    const options = { from: accounts[0] };
+    for (let i = 0; i < presale.length; i++) {
+      const address = presale[i].address;
+      const invested = presale[i].invested;
+      const mainTokens = presale[i]['main-tokens'];
+      const bonusTokens = presale[i]['bonus-tokens'];
+      const data = distributor.contract.depositPresaleWithBonus['address,uint256,uint256,uint256']
+        .getData(address, utils.toWei(mainTokens), utils.toWei(invested), utils.toWei(bonusTokens), options);
+      await distributor.sendTransaction({ from: accounts[0], value: 0, data })
+        .then(logTx);
 
-      const options = { from: accounts[0] };
-      for (let i = 0; i < presale.length; i++) {
-        const sale = presale[i];
-        const data = distributor.contract.depositPresaleWithBonus['address,uint256,uint256,uint256']
-          .getData(sale.address, sale.tokens, sale.wei, sale.bonus, options);
-        await distributor.sendTransaction({ from: accounts[0], value: 0, data })
-          .then(logTx);
-
-        // Log Presale invesment
-        logger.data(`Presale #${i} | ${sale.address}`);
-        const totalETH = `${utils.fromWei(sale.wei)} ETH`;
-        const totalTOL = `${utils.fromWei(sale.tokens)} TOL`;
-        const totalBonus = `${utils.fromWei(sale.bonus)} TOL`;
-        logger.data(`  - Invested: ${totalETH} | Bought: ${totalTOL} | Bonus: ${totalBonus}\n`);
-      }
+      // Log Presale invesment
+      logger.data(`Presale #${i} | ${address}`);
+      logger.data(`  - Invested: ${invested} ETH | Bought: ${mainTokens} TOL | Bonus: ${bonusTokens} TOL\n`);
     }
+
     callback();
   } catch (e) {
     logger.error(`${SCRIPT_NAME} error:`);

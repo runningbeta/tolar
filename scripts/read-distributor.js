@@ -1,8 +1,10 @@
 const minimist = require('minimist');
 const moment = require('moment');
 const { logger, logScript } = require('./util/logs');
+const to = require('./util/to');
 
 const TokenDistributor = artifacts.require('TokenDistributor');
+const Token = artifacts.require('ERC20');
 
 const SCRIPT_NAME = '[TokenDistributor] Read script';
 
@@ -21,7 +23,8 @@ module.exports = async function (callback) {
     const address = args.contract;
     logger.data(`Using contract: ${address}`);
 
-    const contract = await TokenDistributor.at(address);
+    const [ error, contract ] = await to(TokenDistributor.at(address));
+    if (error) throw error;
 
     const owner = await contract.owner();
     logger.data(`Contract owner: ${owner}`);
@@ -38,8 +41,8 @@ module.exports = async function (callback) {
     const wallet = await contract.wallet();
     logger.data(`Crowdsale factory - wallet: ${wallet}`);
 
-    const token = await contract.token();
-    logger.data(`Crowdsale factory - token: ${token}`);
+    const tokenAddr = await contract.token();
+    logger.data(`Crowdsale factory - token: ${tokenAddr}`);
 
     const cap = await contract.cap();
     logger.data(`Crowdsale factory - cap: ${cap}`);
@@ -70,6 +73,12 @@ module.exports = async function (callback) {
 
     const vestingFactory = await contract.vestingFactory();
     logger.data(`Vesting Factory contract: ${vestingFactory}`);
+
+    const token = await Token.at(tokenAddr);
+    const allowance = await token.allowance(benefactor, contract.address);
+    logger.data(`Distributor token allowance by benefactor: ${allowance}`);
+    const balance = await token.balanceOf(contract.address);
+    logger.data(`Distributor token ballance: ${balance}`);
 
     callback();
   } catch (e) {

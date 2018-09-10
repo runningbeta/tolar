@@ -2,6 +2,7 @@ const minimist = require('minimist');
 const inquirer = require('inquirer');
 const { promisify } = require('util');
 const { logger, logScript, logTx } = require('./util/logs');
+const to = require('./util/to');
 
 const Finalizable = artifacts.require('Finalizable');
 
@@ -25,11 +26,14 @@ module.exports = async function (callback) {
     const address = args.contract;
     logger.data(`Using contract: ${address}`);
 
-    const contract = await Finalizable.at(address);
+    const [ error, contract ] = await to(Finalizable.at(address));
+    if (error) throw error;
+
     const isFinalized = await contract.isFinalized();
     if (isFinalized) {
-      console.error('Finalization error!');
-      console.error('Contract already finalized. Exiting...');
+      logger.error('Finalization error!');
+      logger.error('Contract already finalized. Exiting...');
+      callback();
       return;
     }
 

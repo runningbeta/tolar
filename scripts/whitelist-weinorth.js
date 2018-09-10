@@ -3,6 +3,7 @@ const axios = require('axios');
 const { utils } = require('web3');
 const { promisify } = require('util');
 const { logger, logScript } = require('./util/logs');
+const to = require('./util/to');
 const setGroupCap = require('./setGroupCap');
 
 const TokenDistributor = artifacts.require('TokenDistributor');
@@ -35,22 +36,21 @@ module.exports = async function (callback) {
       throw new Error('Error while fetching whitelisted accounts.');
     }
 
-    const distributor = await TokenDistributor.at(distAddress);
+    const [ error, distributor ] = await to(TokenDistributor.at(distAddress));
+    if (error) throw error;
 
-    if (distributor) {
-      const whitelist = response.data;
-      logger.data(`Total accounts... [${whitelist.length}]`);
+    const whitelist = response.data;
+    logger.data(`Total accounts... [${whitelist.length}]`);
 
-      const addresses = [];
-      for (let i = 0; i < whitelist.length; i++) {
-        if (whitelist[i].approved) addresses.push(whitelist[i].account);
-      }
-
-      logger.data(`Whitelist accounts... [${addresses.length}]`);
-
-      const cap = utils.toWei('10', 'ether');
-      await setGroupCap(distributor, addresses, cap);
+    const addresses = [];
+    for (let i = 0; i < whitelist.length; i++) {
+      if (whitelist[i].approved) addresses.push(whitelist[i].account);
     }
+
+    logger.data(`Whitelist accounts... [${addresses.length}]`);
+
+    const cap = utils.toWei('10', 'ether');
+    await setGroupCap(distributor, addresses, cap);
 
     callback();
   } catch (e) {

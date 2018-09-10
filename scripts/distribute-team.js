@@ -5,6 +5,7 @@ const { utils } = require('web3');
 const { promisify } = require('util');
 const { allValid } = require('./util/addresses');
 const { logger, logScript, logTx } = require('./util/logs');
+const to = require('./util/to');
 
 const config = require('./config');
 
@@ -23,7 +24,8 @@ module.exports = async function (callback) {
     const args = minimist(process.argv.slice(2), { string: 'distributor' });
     logger.data(`Using distributor: ${args.distributor}`);
     if (!args.distributor) {
-      console.error('Error: unknown distributor');
+      logger.error('Error: unknown distributor');
+      callback();
       return;
     }
 
@@ -32,7 +34,9 @@ module.exports = async function (callback) {
       throw new Error('Some addresses not valid');
     }
 
-    const distributor = await TokenDistributor.at(args.distributor);
+    const [ error, distributor ] = await to(TokenDistributor.at(args.distributor));
+    if (error) throw error;
+
     const tokenAddr = await distributor.token();
     const token = await Token.at(tokenAddr);
 

@@ -21,7 +21,8 @@ module.exports = async function (callback) {
     const args = minimist(process.argv.slice(2), { string: 'wallet' });
     logger.data(`Using wallet: ${args.wallet}`);
     if (!args.wallet) {
-      console.error('Error: unknown wallet');
+      logger.error('Error: unknown wallet');
+      callback();
       return;
     }
 

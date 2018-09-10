@@ -1,5 +1,6 @@
 const minimist = require('minimist');
 const { logger, logScript } = require('./util/logs');
+const to = require('./util/to');
 
 const SCRIPT_NAME = 'Read Events script';
 
@@ -18,7 +19,8 @@ module.exports = async function (callback) {
     logger.data(`Using contract: ${args.contract}`);
 
     const Contract = artifacts.require(args.name);
-    const contract = await Contract.at(args.contract);
+    const [ error, contract ] = await to(Contract.at(args.contract));
+    if (error) throw error;
 
     const events = contract.allEvents({
       fromBlock: 0,
@@ -27,8 +29,8 @@ module.exports = async function (callback) {
 
     events.get(function (error, events) {
       if (error) {
-        console.error('Read error!');
-        console.error(error);
+        logger.error('Read error!');
+        logger.error(error);
         return;
       }
 

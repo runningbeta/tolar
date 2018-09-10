@@ -1,6 +1,7 @@
 const minimist = require('minimist');
 const moment = require('moment');
 const { logger, logScript } = require('./util/logs');
+const to = require('./util/to');
 
 const TokenTimelockFactory = artifacts.require('TokenTimelockFactoryImpl');
 const TokenTimelock = artifacts.require('TokenTimelock');
@@ -22,7 +23,8 @@ module.exports = async function (callback) {
     const args = minimist(process.argv.slice(2), { string: ['contract', 'creator'] });
     logger.data(`Using contract: ${args.contract}`);
 
-    const contract = await TokenTimelockFactory.at(args.contract);
+    const [ error, contract ] = await to(TokenTimelockFactory.at(args.contract));
+    if (error) throw error;
 
     const instantiationCount = await contract.getInstantiationCount(args.creator);
     logger.data(`Creator total instantiation count: ${instantiationCount}`);

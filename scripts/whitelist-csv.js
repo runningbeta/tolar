@@ -4,6 +4,8 @@ const csv = require('csvtojson');
 const { promisify } = require('util');
 const { utils } = require('web3');
 const { logger, logScript } = require('./util/logs');
+const to = require('./util/to');
+
 const setGroupCap = require('./setGroupCap');
 
 const TokenDistributor = artifacts.require('TokenDistributor');
@@ -31,20 +33,19 @@ module.exports = async function (callback) {
     const csvFs = await fs.createReadStream(fileName);
     const data = await csv({ eol: '\n' }).fromStream(csvFs);
 
-    const distributor = await TokenDistributor.at(distAddress);
+    const [ error, distributor ] = await to(TokenDistributor.at(distAddress));
+    if (error) throw error;
 
-    if (distributor) {
-      logger.data(`Whitelist accounts... [${data.length}]`);
+    logger.data(`Whitelist accounts... [${data.length}]`);
 
-      const addresses = [];
-      for (let i = 0; i < data.length; i++) {
-        const address = data[i][columnName];
-        addresses.push(address);
-      }
-
-      const cap = utils.toWei('10', 'ether');
-      await setGroupCap(distributor, addresses, cap);
+    const addresses = [];
+    for (let i = 0; i < data.length; i++) {
+      const address = data[i][columnName];
+      addresses.push(address);
     }
+
+    const cap = utils.toWei('10', 'ether');
+    await setGroupCap(distributor, addresses, cap);
 
     callback();
   } catch (e) {

@@ -1,6 +1,7 @@
 const minimist = require('minimist');
 const moment = require('moment');
 const { logger, logScript } = require('./util/logs');
+const to = require('./util/to');
 
 const TokenTimelockEscrow = artifacts.require('TokenTimelockEscrow');
 
@@ -20,7 +21,8 @@ module.exports = async function (callback) {
     const args = minimist(process.argv.slice(2), { string: 'contract', boolean: 'raw' });
     logger.data(`Using contract: ${args.contract}`);
 
-    const contract = await TokenTimelockEscrow.at(args.contract);
+    const [ error, contract ] = await to(TokenTimelockEscrow.at(args.contract));
+    if (error) throw error;
 
     const token = await contract.token();
     logger.data(`Token: ${token}`);
@@ -34,8 +36,8 @@ module.exports = async function (callback) {
 
     events.get(function (error, events) {
       if (error) {
-        console.error('Read error!');
-        console.error(error);
+        logger.error('Read error!');
+        logger.error(error);
         return;
       }
 
