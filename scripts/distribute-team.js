@@ -52,7 +52,8 @@ module.exports = async function (callback) {
       const receipt = await distributor.depositAndLock(escrow.address, escrowAmount, escrow.releaseTime)
         .then(logTx);
       const timelockAddr = receipt.logs[0].args.instantiation;
-      logger.data(`Locked ${utils.fromWei(escrowAmount.toString(10))} TOL tokens at: ${timelockAddr}\n`);
+      // eslint-disable-next-line
+      logger.data(`Locked for ${escrow.address} total of ${utils.fromWei(escrowAmount.toString(10))} TOL tokens at: ${timelockAddr}\n`);
     }
 
     callback();

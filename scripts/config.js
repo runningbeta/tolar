@@ -26,7 +26,7 @@ module.exports = {
   closingTime,
 
   withdrawTime,
-  bonusTime: closingTime + duration.weeks(12),
+  bonusTime: withdrawTime + duration.days(90),
 
   escrow: [
     // founders 20%
@@ -34,63 +34,70 @@ module.exports = {
     // 10% available after 2yr
     {
       id: 'founder_1',
-      address: '0xf17f52151EbEF6C7334FAD080c5704D77216b732',
+      address: '0x03C3A6aa06d2130d67Ba62AcFdf6B0a311fee659',
       percentage: 0.1,
       releaseTime: closingTime + duration.years(2),
     },
     {
       id: 'founder_2',
-      address: '0xC5fdf4076b8F3A5357c5E395ab970B5B54098Fef',
+      address: '0x3c9F55570fb4c3bb8e056AF064914f037E2a46D0',
       percentage: 0.1,
       releaseTime: closingTime + duration.years(2),
     },
     // development fund 32%
-    //  5% available after 1yr
+    //  2,5% available at withdraw time
+    //  2,5% available after 1yr
     //  5% available after 2yr
     // 22% available after 3yr
     {
-      id: 'dev_fund',
-      address: '0x821aEa9a577a9b44299B9c15c88cf3087F3b5544',
-      percentage: 0.05,
+      id: 'dev_fund_unlocked',
+      address: '0xCd5fb5D52eAd04Eb8349bEfA27cc935D931350B2',
+      percentage: 0.025,
+      releaseTime: withdrawTime,
+    },
+    {
+      id: 'dev_fund_first_year',
+      address: '0xCd5fb5D52eAd04Eb8349bEfA27cc935D931350B2',
+      percentage: 0.025,
       releaseTime: closingTime + duration.years(1),
     },
     {
-      id: 'dev_fund',
-      address: '0x821aEa9a577a9b44299B9c15c88cf3087F3b5544',
+      id: 'dev_fund_second_year',
+      address: '0xCd5fb5D52eAd04Eb8349bEfA27cc935D931350B2',
       percentage: 0.05,
       releaseTime: closingTime + duration.years(2),
     },
     {
-      id: 'dev_fund',
-      address: '0x821aEa9a577a9b44299B9c15c88cf3087F3b5544',
+      id: 'dev_fund_third_year',
+      address: '0xCd5fb5D52eAd04Eb8349bEfA27cc935D931350B2',
       percentage: 0.22,
       releaseTime: closingTime + duration.years(3),
     },
     // node start fund 8%
     {
       id: 'nodes',
-      address: '0x0d1d4e623D10F9FBA5Db95830F7d3839406C6AF2',
+      address: '0x8D5A18803f7Ffc4c2905088FE701fBa489cFa2fb',
       percentage: 0.08,
-      releaseTime: closingTime + duration.days(90),
+      releaseTime: closingTime + duration.days(180),
     },
     // developers fund 2.5%
     {
       id: 'developers',
-      address: '0x2932b7A2355D6fecc4b5c0B6BD44cC31df247a2e',
+      address: '0xaA8e4669CB3bC17AFe6cD2DC36035CF01024b0B1',
       percentage: 0.025,
       releaseTime: closingTime + duration.years(2),
     },
     // developers fund 2.5%
     {
       id: 'advisors',
-      address: '0x2191eF87E392377ec08E7c08Eb105Ef5448eCED5',
+      address: '0x910270aCFb5B1b3c786168e4699B489B4097F6b2',
       percentage: 0.025,
-      releaseTime: withdrawTime,
+      releaseTime: closingTime + duration.years(1),
     },
-    // beta fee
+    // r8 fee
     {
       id: 'runningbeta',
-      address: '0x0F4F2Ac550A1b4e2280d04c21cEa7EBD822934b5',
+      address: '0xdc89d568019aDe8fDAf8c2a052C730a02Eb6ADd0',
       percentage: 0.00189585,
       releaseTime: closingTime + duration.days(180),
     },

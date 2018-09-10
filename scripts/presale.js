@@ -53,7 +53,7 @@ module.exports = async function (callback) {
         .then(logTx);
 
       // Log Presale invesment
-      logger.data(`Presale #${i} | ${address}`);
+      logger.data(`Presale #${i}/${presale.length - 1} | ${address}`);
       logger.data(`  - Invested: ${invested} ETH | Bought: ${mainTokens} TOL | Bonus: ${bonusTokens} TOL\n`);
     }
 

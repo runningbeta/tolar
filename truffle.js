@@ -47,6 +47,7 @@ module.exports = {
     ropsten: {
       provider: () => infuraProvider('ropsten'),
       network_id: 3, // eslint-disable-line camelcase
+      gas: 6721974,
       gasPrice: web3.utils.toWei('20', 'gwei'),
     },
     mainnet: {

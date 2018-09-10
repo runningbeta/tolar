@@ -53,7 +53,6 @@ const logScript = title => {
 };
 
 const logContract = r => {
-  logger.data('\n');
   logger.tx(`Transaction: ${r.transactionHash}`);
   logger.data(`Contract created: ${r.address}`);
   logger.data(`Contract name: ${r.constructor.contractName}`);
@@ -62,7 +61,6 @@ const logContract = r => {
 };
 
 const logTx = r => {
-  logger.data('\n');
   logger.tx(`Transaction: ${r.tx}`);
   logger.data(`Transaction index: ${r.receipt.transactionIndex}`);
   logger.data(`Block hash: ${r.receipt.blockHash}`);
