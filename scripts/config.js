@@ -94,12 +94,5 @@ module.exports = {
       percentage: 0.025,
       releaseTime: closingTime + duration.years(1),
     },
-    // r8 fee
-    {
-      id: 'runningbeta',
-      address: '0xdc89d568019aDe8fDAf8c2a052C730a02Eb6ADd0',
-      percentage: 0.00189585,
-      releaseTime: closingTime + duration.days(180),
-    },
   ],
 };
