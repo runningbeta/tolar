@@ -11,7 +11,7 @@ const HDWalletProvider = require('truffle-hdwallet-provider');
 
 const providerWithMnemonic = (mnemonic, rpcEndpoint) => new HDWalletProvider(mnemonic, rpcEndpoint);
 
-const infuraEndpoint = network => `https://${network}.infura.io/${process.env.INFURA_API_KEY}`;
+const infuraEndpoint = network => `https://${network}.infura.io/v3/${process.env.INFURA_API_KEY}`;
 
 const infuraProvider = network =>
   providerWithMnemonic(process.env.MNEMONIC || '', infuraEndpoint(network));
