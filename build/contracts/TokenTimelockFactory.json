@@ -1,0 +1,421 @@
+{
+  "contractName": "TokenTimelockFactory",
+  "abi": [
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_token",
+          "type": "address"
+        },
+        {
+          "name": "_beneficiary",
+          "type": "address"
+        },
+        {
+          "name": "_releaseTime",
+          "type": "uint256"
+        }
+      ],
+      "name": "create",
+      "outputs": [
+        {
+          "name": "wallet",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "sourceMap": "",
+  "deployedSourceMap": "",
+  "source": "pragma solidity 0.4.24;\n\nimport \"openzeppelin-solidity/contracts/token/ERC20/ERC20.sol\";\n\n\n/**\n * @title TokenTimelockFactory\n * @dev Allows creation of timelock wallet.\n */\ncontract TokenTimelockFactory {\n\n  /**\n   * @dev Allows verified creation of token timelock wallet.\n   * @param _token Address of the token being locked.\n   * @param _beneficiary address of the beneficiary to whom vested tokens are transferred.\n   * @param _releaseTime The release times after which the tokens can be withdrawn.\n   * @return Returns wallet address.\n   */\n  function create(\n    ERC20 _token,\n    address _beneficiary,\n    uint256 _releaseTime\n  )\n    public\n    returns (address wallet);\n}\n",
+  "sourcePath": "/Users/krebernisak/Documents/workspace/work/runningbeta/weinorth/tolar/contracts/payment/TokenTimelockFactory.sol",
+  "ast": {
+    "absolutePath": "/Users/krebernisak/Documents/workspace/work/runningbeta/weinorth/tolar/contracts/payment/TokenTimelockFactory.sol",
+    "exportedSymbols": {
+      "TokenTimelockFactory": [
+        1515
+      ]
+    },
+    "id": 1516,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 1502,
+        "literals": [
+          "solidity",
+          "0.4",
+          ".24"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:23:9"
+      },
+      {
+        "absolutePath": "openzeppelin-solidity/contracts/token/ERC20/ERC20.sol",
+        "file": "openzeppelin-solidity/contracts/token/ERC20/ERC20.sol",
+        "id": 1503,
+        "nodeType": "ImportDirective",
+        "scope": 1516,
+        "sourceUnit": 2465,
+        "src": "25:63:9",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "baseContracts": [],
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "documentation": "@title TokenTimelockFactory\n@dev Allows creation of timelock wallet.",
+        "fullyImplemented": false,
+        "id": 1515,
+        "linearizedBaseContracts": [
+          1515
+        ],
+        "name": "TokenTimelockFactory",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "body": null,
+            "documentation": "@dev Allows verified creation of token timelock wallet.\n@param _token Address of the token being locked.\n@param _beneficiary address of the beneficiary to whom vested tokens are transferred.\n@param _releaseTime The release times after which the tokens can be withdrawn.\n@return Returns wallet address.",
+            "id": 1514,
+            "implemented": false,
+            "isConstructor": false,
+            "isDeclaredConst": false,
+            "modifiers": [],
+            "name": "create",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 1510,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 1505,
+                  "name": "_token",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 1514,
+                  "src": "569:12:9",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_contract$_ERC20_$2464",
+                    "typeString": "contract ERC20"
+                  },
+                  "typeName": {
+                    "contractScope": null,
+                    "id": 1504,
+                    "name": "ERC20",
+                    "nodeType": "UserDefinedTypeName",
+                    "referencedDeclaration": 2464,
+                    "src": "569:5:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_contract$_ERC20_$2464",
+                      "typeString": "contract ERC20"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 1507,
+                  "name": "_beneficiary",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 1514,
+                  "src": "587:20:9",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 1506,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "587:7:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 1509,
+                  "name": "_releaseTime",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 1514,
+                  "src": "613:20:9",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 1508,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "613:7:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "563:74:9"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 1513,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 1512,
+                  "name": "wallet",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 1514,
+                  "src": "662:14:9",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 1511,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "662:7:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "661:16:9"
+            },
+            "scope": 1515,
+            "src": "548:130:9",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          }
+        ],
+        "scope": 1516,
+        "src": "174:506:9"
+      }
+    ],
+    "src": "0:681:9"
+  },
+  "legacyAST": {
+    "absolutePath": "/Users/krebernisak/Documents/workspace/work/runningbeta/weinorth/tolar/contracts/payment/TokenTimelockFactory.sol",
+    "exportedSymbols": {
+      "TokenTimelockFactory": [
+        1515
+      ]
+    },
+    "id": 1516,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 1502,
+        "literals": [
+          "solidity",
+          "0.4",
+          ".24"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:23:9"
+      },
+      {
+        "absolutePath": "openzeppelin-solidity/contracts/token/ERC20/ERC20.sol",
+        "file": "openzeppelin-solidity/contracts/token/ERC20/ERC20.sol",
+        "id": 1503,
+        "nodeType": "ImportDirective",
+        "scope": 1516,
+        "sourceUnit": 2465,
+        "src": "25:63:9",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "baseContracts": [],
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "documentation": "@title TokenTimelockFactory\n@dev Allows creation of timelock wallet.",
+        "fullyImplemented": false,
+        "id": 1515,
+        "linearizedBaseContracts": [
+          1515
+        ],
+        "name": "TokenTimelockFactory",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "body": null,
+            "documentation": "@dev Allows verified creation of token timelock wallet.\n@param _token Address of the token being locked.\n@param _beneficiary address of the beneficiary to whom vested tokens are transferred.\n@param _releaseTime The release times after which the tokens can be withdrawn.\n@return Returns wallet address.",
+            "id": 1514,
+            "implemented": false,
+            "isConstructor": false,
+            "isDeclaredConst": false,
+            "modifiers": [],
+            "name": "create",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 1510,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 1505,
+                  "name": "_token",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 1514,
+                  "src": "569:12:9",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_contract$_ERC20_$2464",
+                    "typeString": "contract ERC20"
+                  },
+                  "typeName": {
+                    "contractScope": null,
+                    "id": 1504,
+                    "name": "ERC20",
+                    "nodeType": "UserDefinedTypeName",
+                    "referencedDeclaration": 2464,
+                    "src": "569:5:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_contract$_ERC20_$2464",
+                      "typeString": "contract ERC20"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 1507,
+                  "name": "_beneficiary",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 1514,
+                  "src": "587:20:9",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 1506,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "587:7:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 1509,
+                  "name": "_releaseTime",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 1514,
+                  "src": "613:20:9",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 1508,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "613:7:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "563:74:9"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 1513,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 1512,
+                  "name": "wallet",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 1514,
+                  "src": "662:14:9",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 1511,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "662:7:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "661:16:9"
+            },
+            "scope": 1515,
+            "src": "548:130:9",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          }
+        ],
+        "scope": 1516,
+        "src": "174:506:9"
+      }
+    ],
+    "src": "0:681:9"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.4.24+commit.e67f0147.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "2.0.1",
+  "updatedAt": "2018-09-12T13:47:04.859Z"
+}

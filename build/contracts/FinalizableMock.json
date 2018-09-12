@@ -1,0 +1,497 @@
+{
+  "contractName": "FinalizableMock",
+  "abi": [
+    {
+      "constant": false,
+      "inputs": [],
+      "name": "finalize",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [],
+      "name": "renounceOwnership",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "isFinalized",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "owner",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "transferOwnership",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "anonymous": false,
+      "inputs": [],
+      "name": "Finalized",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "name": "previousOwner",
+          "type": "address"
+        }
+      ],
+      "name": "OwnershipRenounced",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "name": "previousOwner",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "OwnershipTransferred",
+      "type": "event"
+    },
+    {
+      "constant": false,
+      "inputs": [],
+      "name": "finalized",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [],
+      "name": "notFinalized",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x608060405260008054600160a860020a03191633179055610562806100256000396000f3006080604052600436106100825763ffffffff7c010000000000000000000000000000000000000000000000000000000060003504166332c669c481146100875780634bb278f31461009e578063715018a6146100b35780638d4e4083146100c85780638da5cb5b146100f1578063b3f05b971461012f578063f2fde38b14610144575b600080fd5b34801561009357600080fd5b5061009c610172565b005b3480156100aa57600080fd5b5061009c6101fe565b3480156100bf57600080fd5b5061009c610314565b3480156100d457600080fd5b506100dd61039a565b604080519115158252519081900360200190f35b3480156100fd57600080fd5b506101066103bb565b6040805173ffffffffffffffffffffffffffffffffffffffff9092168252519081900360200190f35b34801561013b57600080fd5b5061009c6103d7565b34801561015057600080fd5b5061009c73ffffffffffffffffffffffffffffffffffffffff60043516610462565b60005474010000000000000000000000000000000000000000900460ff16156101fc57604080517f08c379a000000000000000000000000000000000000000000000000000000000815260206004820152601b60248201527f436f6e747261637420616c72656164792066696e616c697a65642e0000000000604482015290519081900360640190fd5b565b60005473ffffffffffffffffffffffffffffffffffffffff16331461022257600080fd5b60005474010000000000000000000000000000000000000000900460ff16156102ac57604080517f08c379a000000000000000000000000000000000000000000000000000000000815260206004820152601b60248201527f436f6e747261637420616c72656164792066696e616c697a65642e0000000000604482015290519081900360640190fd5b6102b46101fc565b6040517f6823b073d48d6e3a7d385eeb601452d680e74bb46afe3255a7d778f3a9b1768190600090a16000805474ff0000000000000000000000000000000000000000191674010000000000000000000000000000000000000000179055565b60005473ffffffffffffffffffffffffffffffffffffffff16331461033857600080fd5b6000805460405173ffffffffffffffffffffffffffffffffffffffff909116917ff8df31144d9c2f0f6b59d69b8b98abd5459d07f2742c4df920b25aae33c6482091a26000805473ffffffffffffffffffffffffffffffffffffffff19169055565b60005474010000000000000000000000000000000000000000900460ff1681565b60005473ffffffffffffffffffffffffffffffffffffffff1681565b60005474010000000000000000000000000000000000000000900460ff1615156101fc57604080517f08c379a000000000000000000000000000000000000000000000000000000000815260206004820152601760248201527f436f6e7472616374206e6f742066696e616c697a65642e000000000000000000604482015290519081900360640190fd5b60005473ffffffffffffffffffffffffffffffffffffffff16331461048657600080fd5b61048f81610492565b50565b73ffffffffffffffffffffffffffffffffffffffff811615156104b457600080fd5b6000805460405173ffffffffffffffffffffffffffffffffffffffff808516939216917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e091a36000805473ffffffffffffffffffffffffffffffffffffffff191673ffffffffffffffffffffffffffffffffffffffff929092169190911790555600a165627a7a7230582050bca602e5c293c8829f4b3a62c5386ae2bcdebcba58c61bc332b2985a8c2aa80029",
+  "deployedBytecode": "0x6080604052600436106100825763ffffffff7c010000000000000000000000000000000000000000000000000000000060003504166332c669c481146100875780634bb278f31461009e578063715018a6146100b35780638d4e4083146100c85780638da5cb5b146100f1578063b3f05b971461012f578063f2fde38b14610144575b600080fd5b34801561009357600080fd5b5061009c610172565b005b3480156100aa57600080fd5b5061009c6101fe565b3480156100bf57600080fd5b5061009c610314565b3480156100d457600080fd5b506100dd61039a565b604080519115158252519081900360200190f35b3480156100fd57600080fd5b506101066103bb565b6040805173ffffffffffffffffffffffffffffffffffffffff9092168252519081900360200190f35b34801561013b57600080fd5b5061009c6103d7565b34801561015057600080fd5b5061009c73ffffffffffffffffffffffffffffffffffffffff60043516610462565b60005474010000000000000000000000000000000000000000900460ff16156101fc57604080517f08c379a000000000000000000000000000000000000000000000000000000000815260206004820152601b60248201527f436f6e747261637420616c72656164792066696e616c697a65642e0000000000604482015290519081900360640190fd5b565b60005473ffffffffffffffffffffffffffffffffffffffff16331461022257600080fd5b60005474010000000000000000000000000000000000000000900460ff16156102ac57604080517f08c379a000000000000000000000000000000000000000000000000000000000815260206004820152601b60248201527f436f6e747261637420616c72656164792066696e616c697a65642e0000000000604482015290519081900360640190fd5b6102b46101fc565b6040517f6823b073d48d6e3a7d385eeb601452d680e74bb46afe3255a7d778f3a9b1768190600090a16000805474ff0000000000000000000000000000000000000000191674010000000000000000000000000000000000000000179055565b60005473ffffffffffffffffffffffffffffffffffffffff16331461033857600080fd5b6000805460405173ffffffffffffffffffffffffffffffffffffffff909116917ff8df31144d9c2f0f6b59d69b8b98abd5459d07f2742c4df920b25aae33c6482091a26000805473ffffffffffffffffffffffffffffffffffffffff19169055565b60005474010000000000000000000000000000000000000000900460ff1681565b60005473ffffffffffffffffffffffffffffffffffffffff1681565b60005474010000000000000000000000000000000000000000900460ff1615156101fc57604080517f08c379a000000000000000000000000000000000000000000000000000000000815260206004820152601760248201527f436f6e7472616374206e6f742066696e616c697a65642e000000000000000000604482015290519081900360640190fd5b60005473ffffffffffffffffffffffffffffffffffffffff16331461048657600080fd5b61048f81610492565b50565b73ffffffffffffffffffffffffffffffffffffffff811615156104b457600080fd5b6000805460405173ffffffffffffffffffffffffffffffffffffffff808516939216917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e091a36000805473ffffffffffffffffffffffffffffffffffffffff191673ffffffffffffffffffffffffffffffffffffffff929092169190911790555600a165627a7a7230582050bca602e5c293c8829f4b3a62c5386ae2bcdebcba58c61bc332b2985a8c2aa80029",
+  "sourceMap": "109:176:8:-;;;680:5:7;654:31;;-1:-1:-1;;;;;;567:18:30;575:10;567:18;;;109:176:8;;;;;;",
+  "deployedSourceMap": "109:176:8:-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;217:65;;8:9:-1;5:2;;;30:1;27;20:12;5:2;217:65:8;;;;;;835:126:7;;8:9:-1;5:2;;;30:1;27;20:12;5:2;835:126:7;;;;1001:111:30;;8:9:-1;5:2;;;30:1;27;20:12;5:2;1001:111:30;;;;654:31:7;;8:9:-1;5:2;;;30:1;27;20:12;5:2;654:31:7;;;;;;;;;;;;;;;;;;;;;;238:20:30;;8:9:-1;5:2;;;30:1;27;20:12;5:2;238:20:30;;;;;;;;;;;;;;;;;;;;;;;154:59:8;;8:9:-1;5:2;;;30:1;27;20:12;5:2;154:59:8;;;;1274:103:30;;8:9:-1;5:2;;;30:1;27;20:12;5:2;-1:-1;1274:103:30;;;;;;;217:65:8;595:11:7;;;;;;;594:12;586:52;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;217:65:8:o;835:126:7:-;719:5:30;;;;705:10;:19;697:28;;;;;;595:11:7;;;;;;;594:12;586:52;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;895:14;:12;:14::i;:::-;920:11;;;;;;;938;:18;;-1:-1:-1;;938:18:7;;;;;835:126::o;1001:111:30:-;719:5;;;;705:10;:19;697:28;;;;;;1077:5;;;1058:25;;1077:5;;;;;1058:25;;;1105:1;1089:18;;-1:-1:-1;;1089:18:30;;;1001:111::o;654:31:7:-;;;;;;;;;:::o;238:20:30:-;;;;;;:::o;154:59:8:-;436:11:7;;;;;;;428:47;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1274:103:30;719:5;;;;705:10;:19;697:28;;;;;;1343:29;1362:9;1343:18;:29::i;:::-;1274:103;:::o;1512:171::-;1582:23;;;;;1574:32;;;;;;1638:5;;;1617:38;;;;;;;1638:5;;;1617:38;;;1661:5;:17;;-1:-1:-1;;1661:17:30;;;;;;;;;;;;1512:171::o",
+  "source": "pragma solidity 0.4.24;\n\nimport \"../lifecycle/Finalizable.sol\";\n\n\n/// @dev mock class using TokenPullPayment\ncontract FinalizableMock is Finalizable {\n\n  function finalized() public onlyFinalized {\n    // noop\n  }\n\n  function notFinalized() public onlyNotFinalized {\n    // noop\n  }\n\n}\n",
+  "sourcePath": "/Users/krebernisak/Documents/workspace/work/runningbeta/weinorth/tolar/contracts/mocks/FinalizableMock.sol",
+  "ast": {
+    "absolutePath": "/Users/krebernisak/Documents/workspace/work/runningbeta/weinorth/tolar/contracts/mocks/FinalizableMock.sol",
+    "exportedSymbols": {
+      "FinalizableMock": [
+        1489
+      ]
+    },
+    "id": 1490,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 1473,
+        "literals": [
+          "solidity",
+          "0.4",
+          ".24"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:23:8"
+      },
+      {
+        "absolutePath": "/Users/krebernisak/Documents/workspace/work/runningbeta/weinorth/tolar/contracts/lifecycle/Finalizable.sol",
+        "file": "../lifecycle/Finalizable.sol",
+        "id": 1474,
+        "nodeType": "ImportDirective",
+        "scope": 1490,
+        "sourceUnit": 1472,
+        "src": "25:38:8",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "baseContracts": [
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 1475,
+              "name": "Finalizable",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 1471,
+              "src": "137:11:8",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_Finalizable_$1471",
+                "typeString": "contract Finalizable"
+              }
+            },
+            "id": 1476,
+            "nodeType": "InheritanceSpecifier",
+            "src": "137:11:8"
+          }
+        ],
+        "contractDependencies": [
+          1471,
+          2936
+        ],
+        "contractKind": "contract",
+        "documentation": "@dev mock class using TokenPullPayment",
+        "fullyImplemented": true,
+        "id": 1489,
+        "linearizedBaseContracts": [
+          1489,
+          1471,
+          2936
+        ],
+        "name": "FinalizableMock",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "body": {
+              "id": 1481,
+              "nodeType": "Block",
+              "src": "196:17:8",
+              "statements": []
+            },
+            "documentation": null,
+            "id": 1482,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": false,
+            "modifiers": [
+              {
+                "arguments": null,
+                "id": 1479,
+                "modifierName": {
+                  "argumentTypes": null,
+                  "id": 1478,
+                  "name": "onlyFinalized",
+                  "nodeType": "Identifier",
+                  "overloadedDeclarations": [],
+                  "referencedDeclaration": 1433,
+                  "src": "182:13:8",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_modifier$__$",
+                    "typeString": "modifier ()"
+                  }
+                },
+                "nodeType": "ModifierInvocation",
+                "src": "182:13:8"
+              }
+            ],
+            "name": "finalized",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 1477,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "172:2:8"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 1480,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "196:0:8"
+            },
+            "scope": 1489,
+            "src": "154:59:8",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 1487,
+              "nodeType": "Block",
+              "src": "265:17:8",
+              "statements": []
+            },
+            "documentation": null,
+            "id": 1488,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": false,
+            "modifiers": [
+              {
+                "arguments": null,
+                "id": 1485,
+                "modifierName": {
+                  "argumentTypes": null,
+                  "id": 1484,
+                  "name": "onlyNotFinalized",
+                  "nodeType": "Identifier",
+                  "overloadedDeclarations": [],
+                  "referencedDeclaration": 1443,
+                  "src": "248:16:8",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_modifier$__$",
+                    "typeString": "modifier ()"
+                  }
+                },
+                "nodeType": "ModifierInvocation",
+                "src": "248:16:8"
+              }
+            ],
+            "name": "notFinalized",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 1483,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "238:2:8"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 1486,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "265:0:8"
+            },
+            "scope": 1489,
+            "src": "217:65:8",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          }
+        ],
+        "scope": 1490,
+        "src": "109:176:8"
+      }
+    ],
+    "src": "0:286:8"
+  },
+  "legacyAST": {
+    "absolutePath": "/Users/krebernisak/Documents/workspace/work/runningbeta/weinorth/tolar/contracts/mocks/FinalizableMock.sol",
+    "exportedSymbols": {
+      "FinalizableMock": [
+        1489
+      ]
+    },
+    "id": 1490,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 1473,
+        "literals": [
+          "solidity",
+          "0.4",
+          ".24"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:23:8"
+      },
+      {
+        "absolutePath": "/Users/krebernisak/Documents/workspace/work/runningbeta/weinorth/tolar/contracts/lifecycle/Finalizable.sol",
+        "file": "../lifecycle/Finalizable.sol",
+        "id": 1474,
+        "nodeType": "ImportDirective",
+        "scope": 1490,
+        "sourceUnit": 1472,
+        "src": "25:38:8",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "baseContracts": [
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 1475,
+              "name": "Finalizable",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 1471,
+              "src": "137:11:8",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_Finalizable_$1471",
+                "typeString": "contract Finalizable"
+              }
+            },
+            "id": 1476,
+            "nodeType": "InheritanceSpecifier",
+            "src": "137:11:8"
+          }
+        ],
+        "contractDependencies": [
+          1471,
+          2936
+        ],
+        "contractKind": "contract",
+        "documentation": "@dev mock class using TokenPullPayment",
+        "fullyImplemented": true,
+        "id": 1489,
+        "linearizedBaseContracts": [
+          1489,
+          1471,
+          2936
+        ],
+        "name": "FinalizableMock",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "body": {
+              "id": 1481,
+              "nodeType": "Block",
+              "src": "196:17:8",
+              "statements": []
+            },
+            "documentation": null,
+            "id": 1482,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": false,
+            "modifiers": [
+              {
+                "arguments": null,
+                "id": 1479,
+                "modifierName": {
+                  "argumentTypes": null,
+                  "id": 1478,
+                  "name": "onlyFinalized",
+                  "nodeType": "Identifier",
+                  "overloadedDeclarations": [],
+                  "referencedDeclaration": 1433,
+                  "src": "182:13:8",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_modifier$__$",
+                    "typeString": "modifier ()"
+                  }
+                },
+                "nodeType": "ModifierInvocation",
+                "src": "182:13:8"
+              }
+            ],
+            "name": "finalized",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 1477,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "172:2:8"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 1480,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "196:0:8"
+            },
+            "scope": 1489,
+            "src": "154:59:8",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 1487,
+              "nodeType": "Block",
+              "src": "265:17:8",
+              "statements": []
+            },
+            "documentation": null,
+            "id": 1488,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": false,
+            "modifiers": [
+              {
+                "arguments": null,
+                "id": 1485,
+                "modifierName": {
+                  "argumentTypes": null,
+                  "id": 1484,
+                  "name": "onlyNotFinalized",
+                  "nodeType": "Identifier",
+                  "overloadedDeclarations": [],
+                  "referencedDeclaration": 1443,
+                  "src": "248:16:8",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_modifier$__$",
+                    "typeString": "modifier ()"
+                  }
+                },
+                "nodeType": "ModifierInvocation",
+                "src": "248:16:8"
+              }
+            ],
+            "name": "notFinalized",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 1483,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "238:2:8"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 1486,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "265:0:8"
+            },
+            "scope": 1489,
+            "src": "217:65:8",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          }
+        ],
+        "scope": 1490,
+        "src": "109:176:8"
+      }
+    ],
+    "src": "0:286:8"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.4.24+commit.e67f0147.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "2.0.1",
+  "updatedAt": "2018-09-06T19:26:20.547Z"
+}

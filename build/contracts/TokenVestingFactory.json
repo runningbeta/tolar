@@ -1,0 +1,507 @@
+{
+  "contractName": "TokenVestingFactory",
+  "abi": [
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_beneficiary",
+          "type": "address"
+        },
+        {
+          "name": "_start",
+          "type": "uint256"
+        },
+        {
+          "name": "_cliff",
+          "type": "uint256"
+        },
+        {
+          "name": "_duration",
+          "type": "uint256"
+        },
+        {
+          "name": "_revocable",
+          "type": "bool"
+        }
+      ],
+      "name": "create",
+      "outputs": [
+        {
+          "name": "wallet",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "sourceMap": "",
+  "deployedSourceMap": "",
+  "source": "pragma solidity 0.4.24;\n\n\n/**\n * @title TokenVestingFactory\n * @dev Allows creation of token vesting wallet.\n */\ncontract TokenVestingFactory {\n\n  /**\n   * @dev Allows verified creation of token vesting wallet.\n   * Creates a vesting contract that vests its balance of any ERC20 token to the\n   * _beneficiary, gradually in a linear fashion until _start + _duration. By then all\n   * of the balance will have vested.\n   * @param _beneficiary address of the beneficiary to whom vested tokens are transferred\n   * @param _cliff duration in seconds of the cliff in which tokens will begin to vest\n   * @param _start the time (as Unix time) at which point vesting starts\n   * @param _duration duration in seconds of the period in which the tokens will vest\n   * @param _revocable whether the vesting is revocable or not\n   * @return Returns wallet address.\n   */\n  function create(\n    address _beneficiary,\n    uint256 _start,\n    uint256 _cliff,\n    uint256 _duration,\n    bool _revocable\n  )\n    public\n    returns (address wallet);\n}\n",
+  "sourcePath": "/Users/krebernisak/Documents/workspace/work/runningbeta/weinorth/tolar/contracts/payment/TokenVestingFactory.sol",
+  "ast": {
+    "absolutePath": "/Users/krebernisak/Documents/workspace/work/runningbeta/weinorth/tolar/contracts/payment/TokenVestingFactory.sol",
+    "exportedSymbols": {
+      "TokenVestingFactory": [
+        1533
+      ]
+    },
+    "id": 1534,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 1517,
+        "literals": [
+          "solidity",
+          "0.4",
+          ".24"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:23:10"
+      },
+      {
+        "baseContracts": [],
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "documentation": "@title TokenVestingFactory\n@dev Allows creation of token vesting wallet.",
+        "fullyImplemented": false,
+        "id": 1533,
+        "linearizedBaseContracts": [
+          1533
+        ],
+        "name": "TokenVestingFactory",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "body": null,
+            "documentation": "@dev Allows verified creation of token vesting wallet.\nCreates a vesting contract that vests its balance of any ERC20 token to the\n_beneficiary, gradually in a linear fashion until _start + _duration. By then all\nof the balance will have vested.\n@param _beneficiary address of the beneficiary to whom vested tokens are transferred\n@param _cliff duration in seconds of the cliff in which tokens will begin to vest\n@param _start the time (as Unix time) at which point vesting starts\n@param _duration duration in seconds of the period in which the tokens will vest\n@param _revocable whether the vesting is revocable or not\n@return Returns wallet address.",
+            "id": 1532,
+            "implemented": false,
+            "isConstructor": false,
+            "isDeclaredConst": false,
+            "modifiers": [],
+            "name": "create",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 1528,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 1519,
+                  "name": "_beneficiary",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 1532,
+                  "src": "882:20:10",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 1518,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "882:7:10",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 1521,
+                  "name": "_start",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 1532,
+                  "src": "908:14:10",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 1520,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "908:7:10",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 1523,
+                  "name": "_cliff",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 1532,
+                  "src": "928:14:10",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 1522,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "928:7:10",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 1525,
+                  "name": "_duration",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 1532,
+                  "src": "948:17:10",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 1524,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "948:7:10",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 1527,
+                  "name": "_revocable",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 1532,
+                  "src": "971:15:10",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bool",
+                    "typeString": "bool"
+                  },
+                  "typeName": {
+                    "id": 1526,
+                    "name": "bool",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "971:4:10",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "876:114:10"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 1531,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 1530,
+                  "name": "wallet",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 1532,
+                  "src": "1015:14:10",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 1529,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1015:7:10",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1014:16:10"
+            },
+            "scope": 1533,
+            "src": "861:170:10",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          }
+        ],
+        "scope": 1534,
+        "src": "113:920:10"
+      }
+    ],
+    "src": "0:1034:10"
+  },
+  "legacyAST": {
+    "absolutePath": "/Users/krebernisak/Documents/workspace/work/runningbeta/weinorth/tolar/contracts/payment/TokenVestingFactory.sol",
+    "exportedSymbols": {
+      "TokenVestingFactory": [
+        1533
+      ]
+    },
+    "id": 1534,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 1517,
+        "literals": [
+          "solidity",
+          "0.4",
+          ".24"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:23:10"
+      },
+      {
+        "baseContracts": [],
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "documentation": "@title TokenVestingFactory\n@dev Allows creation of token vesting wallet.",
+        "fullyImplemented": false,
+        "id": 1533,
+        "linearizedBaseContracts": [
+          1533
+        ],
+        "name": "TokenVestingFactory",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "body": null,
+            "documentation": "@dev Allows verified creation of token vesting wallet.\nCreates a vesting contract that vests its balance of any ERC20 token to the\n_beneficiary, gradually in a linear fashion until _start + _duration. By then all\nof the balance will have vested.\n@param _beneficiary address of the beneficiary to whom vested tokens are transferred\n@param _cliff duration in seconds of the cliff in which tokens will begin to vest\n@param _start the time (as Unix time) at which point vesting starts\n@param _duration duration in seconds of the period in which the tokens will vest\n@param _revocable whether the vesting is revocable or not\n@return Returns wallet address.",
+            "id": 1532,
+            "implemented": false,
+            "isConstructor": false,
+            "isDeclaredConst": false,
+            "modifiers": [],
+            "name": "create",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 1528,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 1519,
+                  "name": "_beneficiary",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 1532,
+                  "src": "882:20:10",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 1518,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "882:7:10",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 1521,
+                  "name": "_start",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 1532,
+                  "src": "908:14:10",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 1520,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "908:7:10",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 1523,
+                  "name": "_cliff",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 1532,
+                  "src": "928:14:10",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 1522,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "928:7:10",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 1525,
+                  "name": "_duration",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 1532,
+                  "src": "948:17:10",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 1524,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "948:7:10",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 1527,
+                  "name": "_revocable",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 1532,
+                  "src": "971:15:10",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bool",
+                    "typeString": "bool"
+                  },
+                  "typeName": {
+                    "id": 1526,
+                    "name": "bool",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "971:4:10",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "876:114:10"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 1531,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 1530,
+                  "name": "wallet",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 1532,
+                  "src": "1015:14:10",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 1529,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1015:7:10",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1014:16:10"
+            },
+            "scope": 1533,
+            "src": "861:170:10",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          }
+        ],
+        "scope": 1534,
+        "src": "113:920:10"
+      }
+    ],
+    "src": "0:1034:10"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.4.24+commit.e67f0147.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "2.0.1",
+  "updatedAt": "2018-09-12T13:47:04.860Z"
+}

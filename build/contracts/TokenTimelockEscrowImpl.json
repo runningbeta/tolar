@@ -1,0 +1,853 @@
+{
+  "contractName": "TokenTimelockEscrowImpl",
+  "abi": [
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_contractAddr",
+          "type": "address"
+        }
+      ],
+      "name": "reclaimContract",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_payee",
+          "type": "address"
+        },
+        {
+          "name": "_amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "deposit",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_payee",
+          "type": "address"
+        }
+      ],
+      "name": "withdraw",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "_payee",
+          "type": "address"
+        }
+      ],
+      "name": "withdrawalAllowed",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [],
+      "name": "renounceOwnership",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "owner",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [],
+      "name": "reclaimEther",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "releaseTime",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "_payee",
+          "type": "address"
+        }
+      ],
+      "name": "depositsOf",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "transferOwnership",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "token",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "name": "_token",
+          "type": "address"
+        },
+        {
+          "name": "_releaseTime",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "fallback"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "name": "payee",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "Deposited",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "name": "payee",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "Withdrawn",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "name": "previousOwner",
+          "type": "address"
+        }
+      ],
+      "name": "OwnershipRenounced",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "name": "previousOwner",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "OwnershipTransferred",
+      "type": "event"
+    }
+  ],
+  "bytecode": "0x608060405234801561001057600080fd5b50604051604080610b5083398101604052805160209091015160008054600160a060020a031916331790558082341561004857600080fd5b600160a060020a03811615156100bf57604080517f08c379a000000000000000000000000000000000000000000000000000000000815260206004820181905260248201527f546f6b656e20616464726573732073686f756c64206e6f74206265203078302e604482015290519081900360640190fd5b60028054600160a060020a031916600160a060020a039290921691909117905542811161017357604080517f08c379a000000000000000000000000000000000000000000000000000000000815260206004820152602560248201527f52656c656173652074696d652073686f756c6420626520696e2074686520667560448201527f747572652e000000000000000000000000000000000000000000000000000000606482015290519081900360840190fd5b60035550506109c9806101876000396000f3006080604052600436106100ae5763ffffffff7c01000000000000000000000000000000000000000000000000000000006000350416632aed7f3f81146100bd57806347e7ef24146100e057806351cff8d914610104578063685ca19414610125578063715018a61461015a5780638da5cb5b1461016f5780639f727c27146101a0578063b91d4001146101b5578063e3a9db1a146101dc578063f2fde38b146101fd578063fc0c546a1461021e575b3480156100ba57600080fd5b50005b3480156100c957600080fd5b506100de600160a060020a0360043516610233565b005b3480156100ec57600080fd5b506100de600160a060020a03600435166024356102cd565b34801561011057600080fd5b506100de600160a060020a03600435166104c3565b34801561013157600080fd5b50610146600160a060020a0360043516610545565b604080519115158252519081900360200190f35b34801561016657600080fd5b506100de61054f565b34801561017b57600080fd5b506101846105bb565b60408051600160a060020a039092168252519081900360200190f35b3480156101ac57600080fd5b506100de6105ca565b3480156101c157600080fd5b506101ca61061c565b60408051918252519081900360200190f35b3480156101e857600080fd5b506101ca600160a060020a0360043516610622565b34801561020957600080fd5b506100de600160a060020a036004351661063d565b34801561022a57600080fd5b5061018461065d565b60008054600160a060020a0316331461024b57600080fd5b5060008054604080517ff2fde38b000000000000000000000000000000000000000000000000000000008152600160a060020a039283166004820152905184939284169263f2fde38b926024808201939182900301818387803b1580156102b157600080fd5b505af11580156102c5573d6000803e3d6000fd5b505050505050565b600054600160a060020a031633146102e457600080fd5b600160a060020a038216151561038157604080517f08c379a000000000000000000000000000000000000000000000000000000000815260206004820152602660248201527f44657374696e6174696f6e20616464726573732073686f756c64206e6f74206260448201527f65203078302e0000000000000000000000000000000000000000000000000000606482015290519081900360840190fd5b600160a060020a03821630141561041f57604080517f08c379a000000000000000000000000000000000000000000000000000000000815260206004820152602d60248201527f4465706f736974732073686f756c64206e6f74206265206d61646520746f207460448201527f68697320636f6e74726163742e00000000000000000000000000000000000000606482015290519081900360840190fd5b600160a060020a038216600090815260016020526040902054610448908263ffffffff61066c16565b600160a060020a038084166000908152600160205260408120929092559054600254610480929081169116308463ffffffff61067f16565b604080518281529051600160a060020a038416917f2da466a7b24304f47e87fa2e1e5a81b9831ce54fec19055ce277ca2f39ba42c4919081900360200190a25050565b6104cc81610545565b151561053957604080517f08c379a000000000000000000000000000000000000000000000000000000000815260206004820152601a60248201527f5769746864726177616c206973206e6f7420616c6c6f7765642e000000000000604482015290519081900360640190fd5b61054281610730565b50565b5060035442101590565b600054600160a060020a0316331461056657600080fd5b60008054604051600160a060020a03909116917ff8df31144d9c2f0f6b59d69b8b98abd5459d07f2742c4df920b25aae33c6482091a26000805473ffffffffffffffffffffffffffffffffffffffff19169055565b600054600160a060020a031681565b600054600160a060020a031633146105e157600080fd5b60008054604051600160a060020a0390911691303180156108fc02929091818181858888f19350505050158015610542573d6000803e3d6000fd5b60035481565b600160a060020a031660009081526001602052604090205490565b600054600160a060020a0316331461065457600080fd5b61054281610868565b600254600160a060020a031681565b8181018281101561067957fe5b92915050565b604080517f23b872dd000000000000000000000000000000000000000000000000000000008152600160a060020a0385811660048301528481166024830152604482018490529151918616916323b872dd916064808201926020929091908290030181600087803b1580156106f357600080fd5b505af1158015610707573d6000803e3d6000fd5b505050506040513d602081101561071d57600080fd5b5051151561072a57600080fd5b50505050565b60008054600160a060020a0316331461074857600080fd5b50600160a060020a0380821660009081526001602090815260408083205460025482517f70a082310000000000000000000000000000000000000000000000000000000081523060048201529251919586959116936370a08231936024808201949293918390030190829087803b1580156107c257600080fd5b505af11580156107d6573d6000803e3d6000fd5b505050506040513d60208110156107ec57600080fd5b505110156107f657fe5b600160a060020a038083166000908152600160205260408120556002546108259116838363ffffffff6108e516565b604080518281529051600160a060020a038416917f7084f5476618d8e60b11ef0d7d3f06914655adb8793e28ff7f018d4c76d505d5919081900360200190a25050565b600160a060020a038116151561087d57600080fd5b60008054604051600160a060020a03808516939216917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e091a36000805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a0392909216919091179055565b82600160a060020a031663a9059cbb83836040518363ffffffff167c01000000000000000000000000000000000000000000000000000000000281526004018083600160a060020a0316600160a060020a0316815260200182815260200192505050602060405180830381600087803b15801561096157600080fd5b505af1158015610975573d6000803e3d6000fd5b505050506040513d602081101561098b57600080fd5b5051151561099857600080fd5b5050505600a165627a7a72305820a6a2e4cf795e3d05cb1355f5110b8a27b5045f1b299965146f194de70c0c73400029",
+  "deployedBytecode": "0x6080604052600436106100ae5763ffffffff7c01000000000000000000000000000000000000000000000000000000006000350416632aed7f3f81146100bd57806347e7ef24146100e057806351cff8d914610104578063685ca19414610125578063715018a61461015a5780638da5cb5b1461016f5780639f727c27146101a0578063b91d4001146101b5578063e3a9db1a146101dc578063f2fde38b146101fd578063fc0c546a1461021e575b3480156100ba57600080fd5b50005b3480156100c957600080fd5b506100de600160a060020a0360043516610233565b005b3480156100ec57600080fd5b506100de600160a060020a03600435166024356102cd565b34801561011057600080fd5b506100de600160a060020a03600435166104c3565b34801561013157600080fd5b50610146600160a060020a0360043516610545565b604080519115158252519081900360200190f35b34801561016657600080fd5b506100de61054f565b34801561017b57600080fd5b506101846105bb565b60408051600160a060020a039092168252519081900360200190f35b3480156101ac57600080fd5b506100de6105ca565b3480156101c157600080fd5b506101ca61061c565b60408051918252519081900360200190f35b3480156101e857600080fd5b506101ca600160a060020a0360043516610622565b34801561020957600080fd5b506100de600160a060020a036004351661063d565b34801561022a57600080fd5b5061018461065d565b60008054600160a060020a0316331461024b57600080fd5b5060008054604080517ff2fde38b000000000000000000000000000000000000000000000000000000008152600160a060020a039283166004820152905184939284169263f2fde38b926024808201939182900301818387803b1580156102b157600080fd5b505af11580156102c5573d6000803e3d6000fd5b505050505050565b600054600160a060020a031633146102e457600080fd5b600160a060020a038216151561038157604080517f08c379a000000000000000000000000000000000000000000000000000000000815260206004820152602660248201527f44657374696e6174696f6e20616464726573732073686f756c64206e6f74206260448201527f65203078302e0000000000000000000000000000000000000000000000000000606482015290519081900360840190fd5b600160a060020a03821630141561041f57604080517f08c379a000000000000000000000000000000000000000000000000000000000815260206004820152602d60248201527f4465706f736974732073686f756c64206e6f74206265206d61646520746f207460448201527f68697320636f6e74726163742e00000000000000000000000000000000000000606482015290519081900360840190fd5b600160a060020a038216600090815260016020526040902054610448908263ffffffff61066c16565b600160a060020a038084166000908152600160205260408120929092559054600254610480929081169116308463ffffffff61067f16565b604080518281529051600160a060020a038416917f2da466a7b24304f47e87fa2e1e5a81b9831ce54fec19055ce277ca2f39ba42c4919081900360200190a25050565b6104cc81610545565b151561053957604080517f08c379a000000000000000000000000000000000000000000000000000000000815260206004820152601a60248201527f5769746864726177616c206973206e6f7420616c6c6f7765642e000000000000604482015290519081900360640190fd5b61054281610730565b50565b5060035442101590565b600054600160a060020a0316331461056657600080fd5b60008054604051600160a060020a03909116917ff8df31144d9c2f0f6b59d69b8b98abd5459d07f2742c4df920b25aae33c6482091a26000805473ffffffffffffffffffffffffffffffffffffffff19169055565b600054600160a060020a031681565b600054600160a060020a031633146105e157600080fd5b60008054604051600160a060020a0390911691303180156108fc02929091818181858888f19350505050158015610542573d6000803e3d6000fd5b60035481565b600160a060020a031660009081526001602052604090205490565b600054600160a060020a0316331461065457600080fd5b61054281610868565b600254600160a060020a031681565b8181018281101561067957fe5b92915050565b604080517f23b872dd000000000000000000000000000000000000000000000000000000008152600160a060020a0385811660048301528481166024830152604482018490529151918616916323b872dd916064808201926020929091908290030181600087803b1580156106f357600080fd5b505af1158015610707573d6000803e3d6000fd5b505050506040513d602081101561071d57600080fd5b5051151561072a57600080fd5b50505050565b60008054600160a060020a0316331461074857600080fd5b50600160a060020a0380821660009081526001602090815260408083205460025482517f70a082310000000000000000000000000000000000000000000000000000000081523060048201529251919586959116936370a08231936024808201949293918390030190829087803b1580156107c257600080fd5b505af11580156107d6573d6000803e3d6000fd5b505050506040513d60208110156107ec57600080fd5b505110156107f657fe5b600160a060020a038083166000908152600160205260408120556002546108259116838363ffffffff6108e516565b604080518281529051600160a060020a038416917f7084f5476618d8e60b11ef0d7d3f06914655adb8793e28ff7f018d4c76d505d5919081900360200190a25050565b600160a060020a038116151561087d57600080fd5b60008054604051600160a060020a03808516939216917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e091a36000805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a0392909216919091179055565b82600160a060020a031663a9059cbb83836040518363ffffffff167c01000000000000000000000000000000000000000000000000000000000281526004018083600160a060020a0316600160a060020a0316815260200182815260200192505050602060405180830381600087803b15801561096157600080fd5b505af1158015610975573d6000803e3d6000fd5b505050506040513d602081101561098b57600080fd5b5051151561099857600080fd5b5050505600a165627a7a72305820a6a2e4cf795e3d05cb1355f5110b8a27b5045f1b299965146f194de70c0c73400029",
+  "sourceMap": "244:238:2:-;;;333:147;8:9:-1;5:2;;;30:1;27;20:12;5:2;333:147:2;;;;;;;;;;;;;;;;;;;567:5:21;:18;;-1:-1:-1;;;;;;567:18:21;575:10;567:18;;;333:147:2;;958:9:19;:14;950:23;;;;;;-1:-1:-1;;;;;986:20:7;;;;978:65;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1049:5;:14;;-1:-1:-1;;;;;;1049:14:7;-1:-1:-1;;;;;1049:14:7;;;;;;;;;;630:15:8;615:30;;607:80;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;693:11;:26;-1:-1:-1;;244:238:2;;;;;;",
+  "deployedSourceMap": "244:238:2:-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;244:238:2;;482:166:18;;8:9:-1;5:2;;;30:1;27;20:12;5:2;-1:-1;482:166:18;-1:-1:-1;;;;;482:166:18;;;;;;;1499:379:7;;8:9:-1;5:2;;;30:1;27;20:12;5:2;-1:-1;1499:379:7;-1:-1:-1;;;;;1499:379:7;;;;;;;640:144:6;;8:9:-1;5:2;;;30:1;27;20:12;5:2;-1:-1;640:144:6;-1:-1:-1;;;;;640:144:6;;;;;872:176:8;;8:9:-1;5:2;;;30:1;27;20:12;5:2;-1:-1;872:176:8;-1:-1:-1;;;;;872:176:8;;;;;;;;;;;;;;;;;;;;;;;1001:111:21;;8:9:-1;5:2;;;30:1;27;20:12;5:2;1001:111:21;;;;238:20;;8:9:-1;5:2;;;30:1;27;20:12;5:2;238:20:21;;;;;;;;-1:-1:-1;;;;;238:20:21;;;;;;;;;;;;;;1189:91:19;;8:9:-1;5:2;;;30:1;27;20:12;5:2;1189:91:19;;;;471:26:8;;8:9:-1;5:2;;;30:1;27;20:12;5:2;471:26:8;;;;;;;;;;;;;;;;;;;;1203:100:7;;8:9:-1;5:2;;;30:1;27;20:12;5:2;-1:-1;1203:100:7;-1:-1:-1;;;;;1203:100:7;;;;;1274:103:21;;8:9:-1;5:2;;;30:1;27;20:12;5:2;-1:-1;1274:103:21;-1:-1:-1;;;;;1274:103:21;;;;;916:18:7;;8:9:-1;5:2;;;30:1;27;20:12;5:2;916:18:7;;;;482:166:18;555:20;719:5:21;;-1:-1:-1;;;;;719:5:21;705:10;:19;697:28;;;;;;-1:-1:-1;637:5:18;;;606:37;;;;;;-1:-1:-1;;;;;637:5:18;;;606:37;;;;;;586:13;;606:30;;;;;;:37;;;;;;;;;;;637:5;606:30;:37;;;5:2:-1;;;;30:1;27;20:12;5:2;606:37:18;;;;8:9:-1;5:2;;;45:16;42:1;39;24:38;77:16;74:1;67:27;5:2;606:37:18;;;;482:166;;:::o;1499:379:7:-;719:5:21;;-1:-1:-1;;;;;719:5:21;705:10;:19;697:28;;;;;;-1:-1:-1;;;;;1580:20:7;;;;1572:71;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;;;;;1657:23:7;;1675:4;1657:23;;1649:81;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;;;;;1756:16:7;;;;;;-1:-1:-1;1756:16:7;;;;;;:29;;1777:7;1756:20;:29::i;:::-;-1:-1:-1;;;;;1737:16:7;;;;;;;-1:-1:-1;1737:16:7;;;;;:48;;;;1814:5;;-1:-1:-1;1791:5:7;:44;;:5;;;;1814;1821:4;1827:7;1791:22;:44::i;:::-;1847:26;;;;;;;;-1:-1:-1;;;;;1847:26:7;;;;;;;;;;;;;1499:379;;:::o;640:144:6:-;695:25;713:6;695:17;:25::i;:::-;687:64;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;757:22;772:6;757:14;:22::i;:::-;640:144;:::o;872:176:8:-;-1:-1:-1;1032:11:8;;1013:15;:30;;;872:176::o;1001:111:21:-;719:5;;-1:-1:-1;;;;;719:5:21;705:10;:19;697:28;;;;;;1077:5;;;1058:25;;-1:-1:-1;;;;;1077:5:21;;;;1058:25;;;1105:1;1089:18;;-1:-1:-1;;1089:18:21;;;1001:111::o;238:20::-;;;-1:-1:-1;;;;;238:20:21;;:::o;1189:91:19:-;719:5:21;;-1:-1:-1;;;;;719:5:21;705:10;:19;697:28;;;;;;1238:5:19;;;:37;;-1:-1:-1;;;;;1238:5:19;;;;1261:4;1253:21;1238:37;;;;;1253:21;;1238:37;:5;:37;1253:21;1238:5;:37;;;;;;;;8:9:-1;5:2;;;45:16;42:1;39;24:38;77:16;74:1;67:27;471:26:8;;;;:::o;1203:100:7:-;-1:-1:-1;;;;;1282:16:7;1260:7;1282:16;;;-1:-1:-1;1282:16:7;;;;;;;1203:100::o;1274:103:21:-;719:5;;-1:-1:-1;;;;;719:5:21;705:10;:19;697:28;;;;;;1343:29;1362:9;1343:18;:29::i;916:18:7:-;;;-1:-1:-1;;;;;916:18:7;;:::o;1238:128:16:-;1319:7;;;1339;;;;1332:15;;;;1238:128;;;;:::o;521:178:24:-;654:39;;;;;;-1:-1:-1;;;;;654:39:24;;;;;;;;;;;;;;;;;;;;;;:19;;;;;;:39;;;;;;;;;;;;;;;-1:-1:-1;654:19:24;:39;;;5:2:-1;;;;30:1;27;20:12;5:2;654:39:24;;;;8:9:-1;5:2;;;45:16;42:1;39;24:38;77:16;74:1;67:27;5:2;654:39:24;;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;-1:-1;654:39:24;646:48;;;;;;;;521:178;;;;:::o;2028:257:7:-;2085:15;719:5:21;;-1:-1:-1;;;;;719:5:21;705:10;:19;697:28;;;;;;-1:-1:-1;;;;;;2103:16:7;;;;;;;-1:-1:-1;2103:16:7;;;;;;;;;-1:-1:-1;2132:5:7;:30;;;;;2156:4;2132:30;;;;;;2103:16;;;;2132:5;;;:15;;:30;;;;;2103:16;;2132:30;;;;;;;;:5;:30;;;5:2:-1;;;;30:1;27;20:12;5:2;2132:30:7;;;;8:9:-1;5:2;;;45:16;42:1;39;24:38;77:16;74:1;67:27;5:2;2132:30:7;;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;-1:-1;2132:30:7;:41;;2125:49;;;;-1:-1:-1;;;;;2181:16:7;;;2200:1;2181:16;;;-1:-1:-1;2181:16:7;;;;;:20;-1:-1:-1;2207:5:7;:35;;:5;2181:16;2234:7;2207:18;:35::i;:::-;2254:26;;;;;;;;-1:-1:-1;;;;;2254:26:7;;;;;;;;;;;;;2028:257;;:::o;1512:171:21:-;-1:-1:-1;;;;;1582:23:21;;;;1574:32;;;;;;1638:5;;;1617:38;;-1:-1:-1;;;;;1617:38:21;;;;1638:5;;;1617:38;;;1661:5;:17;;-1:-1:-1;;1661:17:21;-1:-1:-1;;;;;1661:17:21;;;;;;;;;;1512:171::o;368:149:24:-;483:28;;;;;;-1:-1:-1;;;;;483:28:24;;;;;;;;;;;;;;;:15;;;;;;:28;;;;;;;;;;;;;;;-1:-1:-1;483:15:24;:28;;;5:2:-1;;;;30:1;27;20:12;5:2;483:28:24;;;;8:9:-1;5:2;;;45:16;42:1;39;24:38;77:16;74:1;67:27;5:2;483:28:24;;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;-1:-1;483:28:24;475:37;;;;;;;;368:149;;;:::o",
+  "source": "pragma solidity 0.4.24;\n\nimport \"openzeppelin-solidity/contracts/ownership/HasNoEther.sol\";\nimport \"openzeppelin-solidity/contracts/ownership/HasNoContracts.sol\";\nimport \"./payment/TokenTimelockEscrow.sol\";\n\n\n/// @title TokenTimelockEscrowImpl\ncontract TokenTimelockEscrowImpl is HasNoEther, HasNoContracts, TokenTimelockEscrow {\n\n  constructor(ERC20 _token, uint256 _releaseTime)\n    public\n    TokenEscrow(_token)\n    TokenTimelockEscrow(_releaseTime)\n  {\n    // constructor\n  }\n}\n",
+  "sourcePath": "/Users/krebernisak/Documents/workspace/work/runningbeta/weinorth/tolar/contracts/TokenTimelockEscrowImpl.sol",
+  "ast": {
+    "absolutePath": "/Users/krebernisak/Documents/workspace/work/runningbeta/weinorth/tolar/contracts/TokenTimelockEscrowImpl.sol",
+    "exportedSymbols": {
+      "TokenTimelockEscrowImpl": [
+        1116
+      ]
+    },
+    "id": 1117,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 1092,
+        "literals": [
+          "solidity",
+          "0.4",
+          ".24"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:23:2"
+      },
+      {
+        "absolutePath": "openzeppelin-solidity/contracts/ownership/HasNoEther.sol",
+        "file": "openzeppelin-solidity/contracts/ownership/HasNoEther.sol",
+        "id": 1093,
+        "nodeType": "ImportDirective",
+        "scope": 1117,
+        "sourceUnit": 2311,
+        "src": "25:66:2",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "openzeppelin-solidity/contracts/ownership/HasNoContracts.sol",
+        "file": "openzeppelin-solidity/contracts/ownership/HasNoContracts.sol",
+        "id": 1094,
+        "nodeType": "ImportDirective",
+        "scope": 1117,
+        "sourceUnit": 2275,
+        "src": "92:70:2",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "/Users/krebernisak/Documents/workspace/work/runningbeta/weinorth/tolar/contracts/payment/TokenTimelockEscrow.sol",
+        "file": "./payment/TokenTimelockEscrow.sol",
+        "id": 1095,
+        "nodeType": "ImportDirective",
+        "scope": 1117,
+        "sourceUnit": 1501,
+        "src": "163:43:2",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "baseContracts": [
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 1096,
+              "name": "HasNoEther",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 2310,
+              "src": "280:10:2",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_HasNoEther_$2310",
+                "typeString": "contract HasNoEther"
+              }
+            },
+            "id": 1097,
+            "nodeType": "InheritanceSpecifier",
+            "src": "280:10:2"
+          },
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 1098,
+              "name": "HasNoContracts",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 2274,
+              "src": "292:14:2",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_HasNoContracts_$2274",
+                "typeString": "contract HasNoContracts"
+              }
+            },
+            "id": 1099,
+            "nodeType": "InheritanceSpecifier",
+            "src": "292:14:2"
+          },
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 1100,
+              "name": "TokenTimelockEscrow",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 1500,
+              "src": "308:19:2",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_TokenTimelockEscrow_$1500",
+                "typeString": "contract TokenTimelockEscrow"
+              }
+            },
+            "id": 1101,
+            "nodeType": "InheritanceSpecifier",
+            "src": "308:19:2"
+          }
+        ],
+        "contractDependencies": [
+          1302,
+          1461,
+          1500,
+          2274,
+          2310,
+          2421
+        ],
+        "contractKind": "contract",
+        "documentation": "@title TokenTimelockEscrowImpl",
+        "fullyImplemented": true,
+        "id": 1116,
+        "linearizedBaseContracts": [
+          1116,
+          1500,
+          1302,
+          1461,
+          2274,
+          2310,
+          2421
+        ],
+        "name": "TokenTimelockEscrowImpl",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "body": {
+              "id": 1114,
+              "nodeType": "Block",
+              "src": "456:24:2",
+              "statements": []
+            },
+            "documentation": null,
+            "id": 1115,
+            "implemented": true,
+            "isConstructor": true,
+            "isDeclaredConst": false,
+            "modifiers": [
+              {
+                "arguments": [
+                  {
+                    "argumentTypes": null,
+                    "id": 1108,
+                    "name": "_token",
+                    "nodeType": "Identifier",
+                    "overloadedDeclarations": [],
+                    "referencedDeclaration": 1103,
+                    "src": "408:6:2",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_contract$_ERC20_$2464",
+                      "typeString": "contract ERC20"
+                    }
+                  }
+                ],
+                "id": 1109,
+                "modifierName": {
+                  "argumentTypes": null,
+                  "id": 1107,
+                  "name": "TokenEscrow",
+                  "nodeType": "Identifier",
+                  "overloadedDeclarations": [],
+                  "referencedDeclaration": 1461,
+                  "src": "396:11:2",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_type$_t_contract$_TokenEscrow_$1461_$",
+                    "typeString": "type(contract TokenEscrow)"
+                  }
+                },
+                "nodeType": "ModifierInvocation",
+                "src": "396:19:2"
+              },
+              {
+                "arguments": [
+                  {
+                    "argumentTypes": null,
+                    "id": 1111,
+                    "name": "_releaseTime",
+                    "nodeType": "Identifier",
+                    "overloadedDeclarations": [],
+                    "referencedDeclaration": 1105,
+                    "src": "440:12:2",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  }
+                ],
+                "id": 1112,
+                "modifierName": {
+                  "argumentTypes": null,
+                  "id": 1110,
+                  "name": "TokenTimelockEscrow",
+                  "nodeType": "Identifier",
+                  "overloadedDeclarations": [],
+                  "referencedDeclaration": 1500,
+                  "src": "420:19:2",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_type$_t_contract$_TokenTimelockEscrow_$1500_$",
+                    "typeString": "type(contract TokenTimelockEscrow)"
+                  }
+                },
+                "nodeType": "ModifierInvocation",
+                "src": "420:33:2"
+              }
+            ],
+            "name": "",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 1106,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 1103,
+                  "name": "_token",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 1115,
+                  "src": "345:12:2",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_contract$_ERC20_$2464",
+                    "typeString": "contract ERC20"
+                  },
+                  "typeName": {
+                    "contractScope": null,
+                    "id": 1102,
+                    "name": "ERC20",
+                    "nodeType": "UserDefinedTypeName",
+                    "referencedDeclaration": 2464,
+                    "src": "345:5:2",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_contract$_ERC20_$2464",
+                      "typeString": "contract ERC20"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 1105,
+                  "name": "_releaseTime",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 1115,
+                  "src": "359:20:2",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 1104,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "359:7:2",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "344:36:2"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 1113,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "456:0:2"
+            },
+            "scope": 1116,
+            "src": "333:147:2",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          }
+        ],
+        "scope": 1117,
+        "src": "244:238:2"
+      }
+    ],
+    "src": "0:483:2"
+  },
+  "legacyAST": {
+    "absolutePath": "/Users/krebernisak/Documents/workspace/work/runningbeta/weinorth/tolar/contracts/TokenTimelockEscrowImpl.sol",
+    "exportedSymbols": {
+      "TokenTimelockEscrowImpl": [
+        1116
+      ]
+    },
+    "id": 1117,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 1092,
+        "literals": [
+          "solidity",
+          "0.4",
+          ".24"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:23:2"
+      },
+      {
+        "absolutePath": "openzeppelin-solidity/contracts/ownership/HasNoEther.sol",
+        "file": "openzeppelin-solidity/contracts/ownership/HasNoEther.sol",
+        "id": 1093,
+        "nodeType": "ImportDirective",
+        "scope": 1117,
+        "sourceUnit": 2311,
+        "src": "25:66:2",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "openzeppelin-solidity/contracts/ownership/HasNoContracts.sol",
+        "file": "openzeppelin-solidity/contracts/ownership/HasNoContracts.sol",
+        "id": 1094,
+        "nodeType": "ImportDirective",
+        "scope": 1117,
+        "sourceUnit": 2275,
+        "src": "92:70:2",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "/Users/krebernisak/Documents/workspace/work/runningbeta/weinorth/tolar/contracts/payment/TokenTimelockEscrow.sol",
+        "file": "./payment/TokenTimelockEscrow.sol",
+        "id": 1095,
+        "nodeType": "ImportDirective",
+        "scope": 1117,
+        "sourceUnit": 1501,
+        "src": "163:43:2",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "baseContracts": [
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 1096,
+              "name": "HasNoEther",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 2310,
+              "src": "280:10:2",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_HasNoEther_$2310",
+                "typeString": "contract HasNoEther"
+              }
+            },
+            "id": 1097,
+            "nodeType": "InheritanceSpecifier",
+            "src": "280:10:2"
+          },
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 1098,
+              "name": "HasNoContracts",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 2274,
+              "src": "292:14:2",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_HasNoContracts_$2274",
+                "typeString": "contract HasNoContracts"
+              }
+            },
+            "id": 1099,
+            "nodeType": "InheritanceSpecifier",
+            "src": "292:14:2"
+          },
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 1100,
+              "name": "TokenTimelockEscrow",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 1500,
+              "src": "308:19:2",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_TokenTimelockEscrow_$1500",
+                "typeString": "contract TokenTimelockEscrow"
+              }
+            },
+            "id": 1101,
+            "nodeType": "InheritanceSpecifier",
+            "src": "308:19:2"
+          }
+        ],
+        "contractDependencies": [
+          1302,
+          1461,
+          1500,
+          2274,
+          2310,
+          2421
+        ],
+        "contractKind": "contract",
+        "documentation": "@title TokenTimelockEscrowImpl",
+        "fullyImplemented": true,
+        "id": 1116,
+        "linearizedBaseContracts": [
+          1116,
+          1500,
+          1302,
+          1461,
+          2274,
+          2310,
+          2421
+        ],
+        "name": "TokenTimelockEscrowImpl",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "body": {
+              "id": 1114,
+              "nodeType": "Block",
+              "src": "456:24:2",
+              "statements": []
+            },
+            "documentation": null,
+            "id": 1115,
+            "implemented": true,
+            "isConstructor": true,
+            "isDeclaredConst": false,
+            "modifiers": [
+              {
+                "arguments": [
+                  {
+                    "argumentTypes": null,
+                    "id": 1108,
+                    "name": "_token",
+                    "nodeType": "Identifier",
+                    "overloadedDeclarations": [],
+                    "referencedDeclaration": 1103,
+                    "src": "408:6:2",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_contract$_ERC20_$2464",
+                      "typeString": "contract ERC20"
+                    }
+                  }
+                ],
+                "id": 1109,
+                "modifierName": {
+                  "argumentTypes": null,
+                  "id": 1107,
+                  "name": "TokenEscrow",
+                  "nodeType": "Identifier",
+                  "overloadedDeclarations": [],
+                  "referencedDeclaration": 1461,
+                  "src": "396:11:2",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_type$_t_contract$_TokenEscrow_$1461_$",
+                    "typeString": "type(contract TokenEscrow)"
+                  }
+                },
+                "nodeType": "ModifierInvocation",
+                "src": "396:19:2"
+              },
+              {
+                "arguments": [
+                  {
+                    "argumentTypes": null,
+                    "id": 1111,
+                    "name": "_releaseTime",
+                    "nodeType": "Identifier",
+                    "overloadedDeclarations": [],
+                    "referencedDeclaration": 1105,
+                    "src": "440:12:2",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  }
+                ],
+                "id": 1112,
+                "modifierName": {
+                  "argumentTypes": null,
+                  "id": 1110,
+                  "name": "TokenTimelockEscrow",
+                  "nodeType": "Identifier",
+                  "overloadedDeclarations": [],
+                  "referencedDeclaration": 1500,
+                  "src": "420:19:2",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_type$_t_contract$_TokenTimelockEscrow_$1500_$",
+                    "typeString": "type(contract TokenTimelockEscrow)"
+                  }
+                },
+                "nodeType": "ModifierInvocation",
+                "src": "420:33:2"
+              }
+            ],
+            "name": "",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 1106,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 1103,
+                  "name": "_token",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 1115,
+                  "src": "345:12:2",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_contract$_ERC20_$2464",
+                    "typeString": "contract ERC20"
+                  },
+                  "typeName": {
+                    "contractScope": null,
+                    "id": 1102,
+                    "name": "ERC20",
+                    "nodeType": "UserDefinedTypeName",
+                    "referencedDeclaration": 2464,
+                    "src": "345:5:2",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_contract$_ERC20_$2464",
+                      "typeString": "contract ERC20"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 1105,
+                  "name": "_releaseTime",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 1115,
+                  "src": "359:20:2",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 1104,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "359:7:2",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "344:36:2"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 1113,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "456:0:2"
+            },
+            "scope": 1116,
+            "src": "333:147:2",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          }
+        ],
+        "scope": 1117,
+        "src": "244:238:2"
+      }
+    ],
+    "src": "0:483:2"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.4.24+commit.e67f0147.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "2.0.1",
+  "updatedAt": "2018-09-12T13:47:04.819Z"
+}

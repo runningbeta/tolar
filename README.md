@@ -81,7 +81,8 @@ Only whitelisted accounts can participate with an individual cap of 10 ETH.
     - and burns them afterward
 - 20% founder tokens, locked for 24 months
 - 32% Tolar dev fund, locked for 36 months
-  - 5% locked for 12 months
+  - 2,5% unlocked
+  - 2,5% locked for 12 months
   - 5% locked for 24 months
   - 22% locked for 36 months
 - 8% PoS Network Start Nodes, locked for 6 months
@@ -90,7 +91,7 @@ Only whitelisted accounts can participate with an individual cap of 10 ETH.
     - burned by the TolarToken owner;
     - minted and reserved on Tolar HashNET for PoS Network Start Nodes
 - 2.5% Developers fund, locked for 24 months
-- 2.5% Advisory fund, locked for 24 months
+- 2.5% Advisory fund, locked for 12 months
 
 All tokens can be withdrawn (or will be airdropped by the team) at least at some later date (after the Crowdsale ends) that is configured at deploy.
 
@@ -99,6 +100,12 @@ All tokens can be withdrawn (or will be airdropped by the team) at least at some
 TolarToken is burnable only after owner finalizes the contract. This will be announced and detailed by the Tolar team after the migration path is ready.
 
 Before that, only the owner can burn TOL tokens. This will be used to burn the Crowdsale unsold tokens (if any), and to migrate to PoS Network Start Nodes when the main network is ready to deploy.
+
+## Security audits
+
+The code was audited by [SmartDec](./audit/smartdec_tolar_security_audit.pdf) and [Cryptronics](./audit/stefan_beyer_cryptronics_tolar_security_audit.pdf).
+
+The latest version of the code that was audited: [2f2fc4e](https://github.com/runningbeta/tolar/commit/2f2fc4eea0b7b5b7e02dc8fd81fb0caca8c70680)
 
 ## License
 
