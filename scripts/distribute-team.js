@@ -56,9 +56,9 @@ module.exports = async function (callback) {
       logger.data(`Locked for ${escrow.address} total of ${utils.fromWei(escrowAmount.toString(10))} TOL tokens at: ${timelockAddr}\n`);
     }
 
-    callback();
+    setTimeout(() => callback(), 1000);
   } catch (e) {
     logger.error(`${SCRIPT_NAME} error:`);
-    callback(e);
+    setTimeout(() => callback(e), 1000);
   }
 };

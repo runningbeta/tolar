@@ -11,7 +11,7 @@ const SCRIPT_NAME = '[TimelockEscrow] Read script';
  * Script that can be used to read all data and events from TokenTimelockEscrow contract
  *
  * Run this script by passing additional arguments:
- *   truffle exec ./scripts/read-timelock-escrow.js --contract 0xbd2e0bd... --raw
+ *   truffle exec ./scripts/read-timelock-escrow.js --contract 0xbd2e0bd... --fromBlock 6326186 --raw
  * @param callback required callback
  */
 module.exports = async function (callback) {
@@ -30,14 +30,14 @@ module.exports = async function (callback) {
     logger.data(`Release time: ${releaseTime} or ${moment.unix(releaseTime)}`);
 
     const events = contract.allEvents({
-      fromBlock: 0,
+      fromBlock: args.fromBlock || 0,
       toBlock: 'latest',
     });
 
-    events.get(function (error, events) {
+    events.get((error, events) => {
       if (error) {
         logger.error('Read error!');
-        logger.error(error);
+        setTimeout(() => callback(error), 1000);
         return;
       }
 
@@ -50,11 +50,11 @@ module.exports = async function (callback) {
         logger.data('  - Payee: ' + eventObj.args.payee.toString(10));
         logger.data('  - Amount: ' + eventObj.args.amount);
       }
-    });
 
-    callback();
+      setTimeout(() => callback(), 1000);
+    });
   } catch (e) {
     logger.error(`${SCRIPT_NAME} error:`);
-    callback(e);
+    setTimeout(() => callback(e), 1000);
   }
 };

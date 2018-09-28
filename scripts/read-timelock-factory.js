@@ -45,9 +45,9 @@ module.exports = async function (callback) {
       logger.data(`  - Release time: ${releaseTime} or ${moment.unix(releaseTime)}`);
     }
 
-    callback();
+    setTimeout(() => callback(), 1000);
   } catch (e) {
     logger.error(`${SCRIPT_NAME} error:`);
-    callback(e);
+    setTimeout(() => callback(e), 1000);
   }
 };

@@ -82,9 +82,9 @@ module.exports = async function (callback) {
       logger.data(`[${config.token}] Distributor ${distributor.address} approved for ${balanceOfBenefactor} TOL.\n`);
     }
 
-    callback();
+    setTimeout(() => callback(), 1000);
   } catch (e) {
     logger.error(`${SCRIPT_NAME} error:`);
-    callback(e);
+    setTimeout(() => callback(e), 1000);
   }
 };

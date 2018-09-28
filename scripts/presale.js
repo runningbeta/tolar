@@ -11,6 +11,8 @@ const TokenDistributor = artifacts.require('TokenDistributor');
 
 const SCRIPT_NAME = '[TokenDistributor] Presale script';
 
+const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
 /**
  * Run this script by passing additional arguments
  * truffle exec ./scripts/presale.js --distributor 0xbd2e0bd... --data ./scripts/presale-sample.csv
@@ -55,11 +57,14 @@ module.exports = async function (callback) {
       // Log Presale invesment
       logger.data(`Presale #${i}/${presale.length - 1} | ${address}`);
       logger.data(`  - Invested: ${invested} ETH | Bought: ${mainTokens} TOL | Bonus: ${bonusTokens} TOL\n`);
+
+      // Wait for the network to stabilize
+      await sleep(5000);
     }
 
-    callback();
+    setTimeout(() => callback(), 1000);
   } catch (e) {
     logger.error(`${SCRIPT_NAME} error:`);
-    callback(e);
+    setTimeout(() => callback(e), 1000);
   }
 };

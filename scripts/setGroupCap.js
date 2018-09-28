@@ -9,10 +9,10 @@ const ProgressBar = require('progress');
 const CHUNK_SIZE = 40;
 const NUM_RETRIES = 5;
 
+const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
 async function filterWhitelisted (contract, addresses, cap) {
   const bar = new ProgressBar('Filtering [:bar] :percent :etas', { total: addresses.length, width: 50 });
-
-  const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
   // slice addresses into jobs
   const jobs = chunk(addresses, CHUNK_SIZE)
@@ -71,6 +71,9 @@ module.exports = async function (contract, addresses, cap) {
   for (let i = 0; i < transactions.length; i++) {
     // retry few times if node is unresponsive
     await asyncRetry(transactions[i](), NUM_RETRIES);
+
+    // Wait for the network to stabilize
+    await sleep(2500);
   }
 
   logger.info('\n');

@@ -33,7 +33,7 @@ module.exports = async function (callback) {
     if (isFinalized) {
       logger.error('Finalization error!');
       logger.error('Contract already finalized. Exiting...');
-      callback();
+      setTimeout(() => callback(), 1000);
       return;
     }
 
@@ -46,9 +46,9 @@ module.exports = async function (callback) {
       logger.data('Finalization success!');
     }
 
-    callback();
+    setTimeout(() => callback(), 1000);
   } catch (e) {
     logger.error(`${SCRIPT_NAME} error:`);
-    callback(e);
+    setTimeout(() => callback(e), 1000);
   }
 };

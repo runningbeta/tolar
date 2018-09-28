@@ -49,12 +49,12 @@ module.exports = async function (callback) {
 
     logger.data(`Whitelist accounts... [${addresses.length}]`);
 
-    const cap = utils.toWei('10', 'ether');
+    const cap = utils.toWei('1000', 'ether');
     await setGroupCap(distributor, addresses, cap);
 
-    callback();
+    setTimeout(() => callback(), 1000);
   } catch (e) {
     logger.error(`${SCRIPT_NAME} error:`);
-    callback(e);
+    setTimeout(() => callback(e), 1000);
   }
 };

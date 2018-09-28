@@ -80,9 +80,9 @@ module.exports = async function (callback) {
     const balance = await token.balanceOf(contract.address);
     logger.data(`Distributor token ballance: ${balance}`);
 
-    callback();
+    setTimeout(() => callback(), 1000);
   } catch (e) {
     logger.error(`${SCRIPT_NAME} error:`);
-    callback(e);
+    setTimeout(() => callback(e), 1000);
   }
 };

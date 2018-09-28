@@ -8,7 +8,7 @@ const SCRIPT_NAME = 'Read Events script';
  * Script that can be used to read all events from a contract
  *
  * Run this script by passing additional arguments:
- *   truffle exec ./scripts/read-events.js --contract 0xbd2e0bd... --name
+ *   truffle exec ./scripts/read-events.js --contract 0xbd2e0bd... --name ContractName --fromBlock 6326186
  * @param callback required callback
  */
 module.exports = async function (callback) {
@@ -23,23 +23,22 @@ module.exports = async function (callback) {
     if (error) throw error;
 
     const events = contract.allEvents({
-      fromBlock: 0,
+      fromBlock: args.fromBlock || 0,
       toBlock: 'latest',
     });
 
     events.get(function (error, events) {
       if (error) {
         logger.error('Read error!');
-        logger.error(error);
+        setTimeout(() => callback(error), 1000);
         return;
       }
 
       logger.data(events);
+      setTimeout(() => callback(), 1000);
     });
-
-    callback();
   } catch (e) {
     logger.error(`${SCRIPT_NAME} error:`);
-    callback(e);
+    setTimeout(() => callback(e), 1000);
   }
 };
